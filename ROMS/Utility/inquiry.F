@@ -379,6 +379,9 @@
           END IF
         END IF
         exit_flag=2
+
+        write(*,*) 'error reading ',TRIM(Vname(1,ifield))
+
         IF (FoundError(exit_flag, NoError, __LINE__,                    &
      &                 __FILE__)) RETURN
       END IF

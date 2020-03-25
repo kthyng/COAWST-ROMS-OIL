@@ -367,6 +367,7 @@
 !
 !  Apply boundary conditions.
 !
+# if !defined OFFLINE
         CALL u3dbc_tile (ng, tile,                                      &
      &                   LBi, UBi, LBj, UBj, N(ng),                     &
      &                   IminS, ImaxS, JminS, JmaxS,                    &
@@ -388,8 +389,10 @@
      &                   IminS, ImaxS, JminS, JmaxS,                    &
      &                   nstp, nnew,                                    &
      &                   v)
+# endif
       END IF
 !
+# if !defined OFFLINE
       IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
         CALL exchange_u3d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj, 1, N(ng),           &
@@ -405,6 +408,7 @@
      &                          LBi, UBi, LBj, UBj, 1, N(ng),           &
      &                          v(:,:,:,nnew))
       END IF
+# endif
 
 #  ifdef DISTRIBUTE
 !
@@ -417,8 +421,7 @@
 #  endif
 # endif
 
-# ifdef SOLVE3D
-!
+# ifdef SOLVE3D && !defined OFFLINE
 !-----------------------------------------------------------------------
 !  If not perfect restart, compute vertically-integrated momentum
 !  (ubar, vbar) from initial 3D momentum (u, v).
@@ -644,7 +647,7 @@
 #  endif
 # endif
 
-# ifdef SOLVE3D
+# ifdef SOLVE3D && !defined OFFLINE
 !
 !-----------------------------------------------------------------------
 !  If not perfect restart, initialize other time levels for tracers.

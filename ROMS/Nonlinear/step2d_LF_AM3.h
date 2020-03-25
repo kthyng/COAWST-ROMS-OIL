@@ -623,6 +623,7 @@
 # endif
 
 # include "set_bounds.h"
+
 !
       ptsk=3-kstp
       CORRECTOR_2D_STEP=.not.PREDICTOR_2D_STEP(ng)
@@ -1092,6 +1093,7 @@
      &                    EWperiodic(ng), NSperiodic(ng),               &
      &                    zeta(:,:,knew))
 # endif
+
 !
 !=======================================================================
 !  Compute right-hand-side for the 2D momentum equations.
@@ -2972,6 +2974,7 @@
         END DO
 # endif
       END IF
+
 !
 !-----------------------------------------------------------------------
 !  Apply lateral boundary conditions.
@@ -2987,6 +2990,7 @@
      &                 IminS, ImaxS, JminS, JmaxS,                      &
      &                 krhs, kstp, knew,                                &
      &                 ubar, vbar, zeta)
+
 !
 !  Compute integral mass flux across open boundaries and adjust
 !  for volume conservation.
@@ -3065,4 +3069,3 @@
       SUBROUTINE step2d
       END SUBROUTINE step2d
 #endif
- 

@@ -140,10 +140,31 @@
 # endif
 #endif
 
-#ifdef AKTCLIMATOLOGY
-          real(r8), pointer :: Aclm(:,:,:)
-          real(r8), pointer :: AclmG(:,:,:,:)
+!#ifdef AKTCLIMATOLOGY
+!          real(r8), pointer :: Aclm(:,:,:)
+!          real(r8), pointer :: AclmG(:,:,:,:)
+!#endif
+#if defined AKTCLIMATOLOGY || defined AKXCLIMATOLOGY
+          real(r8), pointer :: AKtclm(:,:,:)
+          real(r8), pointer :: AKtclmG(:,:,:,:)
 #endif
+#if defined AKSCLIMATOLOGY || defined AKXCLIMATOLOGY
+          real(r8), pointer :: AKsclm(:,:,:)
+          real(r8), pointer :: AKsclmG(:,:,:,:)
+#endif
+#if defined AKVCLIMATOLOGY || defined AKXCLIMATOLOGY
+          real(r8), pointer :: AKvclm(:,:,:)
+          real(r8), pointer :: AKvclmG(:,:,:,:)
+#endif
+#if defined TKECLIMATOLOGY || defined MIXCLIMATOLOGY
+          real(r8), pointer :: tkeclm(:,:,:)
+          real(r8), pointer :: tkeclmG(:,:,:,:)
+#endif
+#if defined GLSCLIMATOLOGY || defined MIXCLIMATOLOGY
+          real(r8), pointer :: glsclm(:,:,:)
+          real(r8), pointer :: glsclmG(:,:,:,:)
+#endif
+
 #ifdef OCLIMATOLOGY
           real(r8), pointer :: oclm(:,:,:)
 # ifndef ANA_OCLIMA
@@ -282,12 +303,43 @@
 # endif
 #endif
 
-#if defined AKTCLIMATOLOGY && defined OFFLINE_FLOATS
-      allocate ( CLIMA(ng) % Aclm(LBi:UBi,LBj:UBj,0:N(ng)) )
-# ifndef ANA_AKTCLIMA
-      allocate ( CLIMA(ng) % AclmG(LBi:UBi,LBj:UBj,0:N(ng),2) )
+!Added by DJ ------------------------
+#if defined AKTCLIMATOLOGY || defined AKXCLIMATOLOGY 
+      allocate ( CLIMA(ng) % AKtclm(LBi:UBi,LBj:UBj,0:N(ng)) )
+#endif
+#if defined AKVCLIMATOLOGY || defined AKXCLIMATOLOGY
+      allocate ( CLIMA(ng) % AKvclm(LBi:UBi,LBj:UBj,0:N(ng)) )
+#endif
+#if defined AKSCLIMATOLOGY || defined AKXCLIMATOLOGY
+      allocate ( CLIMA(ng) % AKsclm(LBi:UBi,LBj:UBj,0:N(ng)) )
+#endif
+#if defined TKECLIMATOLOGY || defined MIXCLIMATOLOGY 
+      allocate ( CLIMA(ng) % tkeclm(LBi:UBi,LBj:UBj,0:N(ng)) )
+#endif
+#if defined GLSCLIMATOLOGY || defined MIXCLIMATOLOGY
+      allocate ( CLIMA(ng) % glsclm(LBi:UBi,LBj:UBj,0:N(ng)) )
+#endif
+
+!#if defined AKTCLIMATOLOGY && defined OFFLINE_FLOATS
+!      allocate ( CLIMA(ng) % Aclm(LBi:UBi,LBj:UBj,0:N(ng)) )
+!#endif
+!------------------
+#ifndef ANA_AKTCLIMA
+      allocate ( CLIMA(ng) % AKtclmG(LBi:UBi,LBj:UBj,0:N(ng),2) )
+# if defined AKVCLIMATOLOGY || defined AKXCLIMATOLOGY
+      allocate ( CLIMA(ng) % AKvclmG(LBi:UBi,LBj:UBj,0:N(ng),2) )
+# endif
+# if defined AKSCLIMATOLOGY || defined AKXCLIMATOLOGY
+      allocate ( CLIMA(ng) % AKsclmG(LBi:UBi,LBj:UBj,0:N(ng),2) )
 # endif
 #endif
+#if defined TKECLIMATOLOGY || defined MIXCLIMATOLOGY
+      allocate ( CLIMA(ng) % tkeclmG(LBi:UBi,LBj:UBj,0:N(ng),2) )
+#endif
+#if defined GLSCLIMATOLOGY || defined MIXCLIMATOLOGY
+      allocate ( CLIMA(ng) % glsclmG(LBi:UBi,LBj:UBj,0:N(ng),2) )
+#endif
+
 #ifdef OCLIMATOLOGY
       allocate ( CLIMA(ng) % oclm(LBi:UBi,LBj:UBj,0:N(ng)) )
 # ifndef ANA_OCLIMA
@@ -539,19 +591,52 @@
       END DO
 #endif
 
+
+! Added by DJ
+
+!#ifdef AKTCLIMATOLOGY
+!      DO j=Jmin,Jmax
+!        DO k=0,N(ng)
+!          DO i=Imin,Imax
+!            CLIMA(ng) % Aclm(i,j,k) = IniVal
+!# ifndef ANA_AKTCLIMA
+!            CLIMA(ng) % AclmG(i,j,k,1) = IniVal
+!            CLIMA(ng) % AclmG(i,j,k,2) = IniVal
+!# endif
+!          END DO
+!        END DO
+!      END DO
+!#endif
+
 #ifdef AKTCLIMATOLOGY
       DO j=Jmin,Jmax
         DO k=0,N(ng)
           DO i=Imin,Imax
-            CLIMA(ng) % Aclm(i,j,k) = IniVal
+            CLIMA(ng) % AKtclm(i,j,k) = IniVal
 # ifndef ANA_AKTCLIMA
-            CLIMA(ng) % AclmG(i,j,k,1) = IniVal
-            CLIMA(ng) % AclmG(i,j,k,2) = IniVal
+            CLIMA(ng) % AKtclmG(i,j,k,1) = IniVal
+            CLIMA(ng) % AKtclmG(i,j,k,2) = IniVal
+#  ifdef MIXCLIMATOLOGY
+            CLIMA(ng) % AKsclm(i,j,k) = IniVal
+            CLIMA(ng) % AKsclmG(i,j,k,1) = IniVal
+            CLIMA(ng) % AKsclmG(i,j,k,2) = IniVal
+            CLIMA(ng) % AKvclm(i,j,k) = IniVal
+            CLIMA(ng) % AKvclmG(i,j,k,1) = IniVal
+            CLIMA(ng) % AKvclmG(i,j,k,2) = IniVal
+            CLIMA(ng) % tkeclm(i,j,k) = IniVal
+            CLIMA(ng) % tkeclmG(i,j,k,1) = IniVal
+            CLIMA(ng) % tkeclmG(i,j,k,2) = IniVal
+            CLIMA(ng) % glsclm(i,j,k) = IniVal
+            CLIMA(ng) % glsclmG(i,j,k,1) = IniVal
+            CLIMA(ng) % glsclmG(i,j,k,2) = IniVal
+#  endif
 # endif
           END DO
         END DO
       END DO
 #endif
+!------------------------------------------------
+
 #ifdef OCLIMATOLOGY
       DO j=Jmin,Jmax
         DO k=0,N(ng)

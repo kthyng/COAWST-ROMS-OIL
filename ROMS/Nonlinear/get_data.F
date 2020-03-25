@@ -1851,17 +1851,85 @@
       END DO
 # endif
 
-# if !defined ANA_AKTCLIMA && defined AKTCLIMATOLOGY
-      CALL get_3dfld (ng, iNLM, idAclm, ncCLMid(idAclm,ng),             &
+! Added by DJ ------------------------------------
+
+!# if !defined ANA_AKTCLIMA && defined AKTCLIMATOLOGY
+!      write(*,*) 'reading AKt in climatology file'
+!      CALL get_3dfld (ng, iNLM, idAclm, ncCLMid(idAclm,ng),             &
+!     &                nCLMfiles(ng), CLM(1,ng), update(1),              &
+!     &                LBi, UBi, LBj, UBj, 0, N(ng), 2, 1,               &
+!#  ifdef MASKING
+!     &                GRID(ng) % rmask,                                 &
+!#  endif
+!     &                CLIMA(ng) % AclmG)
+!          IF (FoundError(exit_flag, NoError, __LINE__,                  &
+!     &                   __FILE__)) RETURN
+!# endif
+
+# if !defined ANA_AKTCLIMA || !defined ANA_VMIX
+# if defined AKTCLIMATOLOGY || defined AKXCLIMATOLOGY
+      !write(*,*) 'reading AKt in climatology file'
+      CALL get_3dfld (ng, iNLM, idAKtclm, ncCLMid(idAKtclm,ng),         &
      &                nCLMfiles(ng), CLM(1,ng), update(1),              &
      &                LBi, UBi, LBj, UBj, 0, N(ng), 2, 1,               &
 #  ifdef MASKING
      &                GRID(ng) % rmask,                                 &
 #  endif
-     &                CLIMA(ng) % AclmG)
+     &                CLIMA(ng) % AKtclmG)
           IF (FoundError(exit_flag, NoError, __LINE__,                  &
      &                   __FILE__)) RETURN
 # endif
+# if defined AKSCLIMATOLOGY || defined AKXCLIMATOLOGY
+      !write(*,*) 'reading AKs in climatology file'
+      CALL get_3dfld (ng, iNLM, idAKsclm, ncCLMid(idAKsclm,ng),         &
+     &                nCLMfiles(ng), CLM(1,ng), update(1),              &
+     &                LBi, UBi, LBj, UBj, 0, N(ng), 2, 1,               &
+#   ifdef MASKING
+     &                GRID(ng) % rmask,                                 &
+#   endif
+     &                CLIMA(ng) % AKsclmG)
+          IF (FoundError(exit_flag, NoError, __LINE__,                  &
+     &                   __FILE__)) RETURN
+# endif
+# if defined AKVCLIMATOLOGY || defined AKXCLIMATOLOGY
+      !write(*,*) 'reading AKv in climatology file'
+      CALL get_3dfld (ng, iNLM, idAKvclm, ncCLMid(idAKvclm,ng),         &
+     &                nCLMfiles(ng), CLM(1,ng), update(1),              &
+     &                LBi, UBi, LBj, UBj, 0, N(ng), 2, 1,               &
+#  ifdef MASKING
+     &                GRID(ng) % rmask,                                 &
+#  endif
+     &                CLIMA(ng) % AKvclmG)
+          IF (FoundError(exit_flag, NoError, __LINE__,                  &
+     &                   __FILE__)) RETURN
+# endif
+# if defined TKECLIMATOLOGY || defined MIXCLIMATOLOGY
+      !write(*,*) 'reading TKE in climatology file'
+      CALL get_3dfld (ng, iNLM, idtkeclm, ncCLMid(idtkeclm,ng),         &
+     &                nCLMfiles(ng), CLM(1,ng), update(1),              &
+     &                LBi, UBi, LBj, UBj, 0, N(ng), 2, 1,               &
+#  ifdef MASKING
+     &                GRID(ng) % rmask,                                 &
+#  endif
+     &                CLIMA(ng) % tkeclmG)
+          IF (FoundError(exit_flag, NoError, __LINE__,                  &
+     &                   __FILE__)) RETURN
+# endif
+# if defined GLSCLIMATOLOGY || defined MIXCLIMATOLOGY
+      !write(*,*) 'reading GLS in climatology file'
+      CALL get_3dfld (ng, iNLM, idglsclm, ncCLMid(idglsclm,ng),         &
+     &                nCLMfiles(ng), CLM(1,ng), update(1),              &
+     &                LBi, UBi, LBj, UBj, 0, N(ng), 2, 1,               &
+#  ifdef MASKING
+     &                GRID(ng) % rmask,                                 &
+#  endif
+     &                CLIMA(ng) % glsclmG)
+          IF (FoundError(exit_flag, NoError, __LINE__,                  &
+     &                   __FILE__)) RETURN
+
+# endif
+# endif
+!--------------------------
 
 # if (defined BEST_NPZ || defined BIO_GOANPZ) && defined IRON_LIMIT
       CALL get_3dfld (ng, iNLM, idTclm(iFe), ncCLMid(idTclm(iFe),ng),   &

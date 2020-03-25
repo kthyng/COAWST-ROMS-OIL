@@ -985,3 +985,19 @@
 #if defined VEG_HMIXING
 # define VISC_3DCOEF
 #endif
+
+
+/*
+ Define Mixing climatology
+ Added by DJ
+ */
+
+#if defined TKECLIMATOLOGY && defined GLSCLIMATOLOGY
+# define MIXCLIMATOLOGY
+#endif
+
+#if defined AKTCLIMATOLOGY && defined AKVCLIMATOLOGY && \
+    defined AKSCLIMATOLOGY
+# define AKXCLIMATOLOGY
+#endif
+

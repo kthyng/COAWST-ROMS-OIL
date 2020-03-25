@@ -147,6 +147,7 @@
       HIS(ng)%Rindex=HIS(ng)%Rindex+1
       Fcount=HIS(ng)%Fcount
       HIS(ng)%Nrec(Fcount)=HIS(ng)%Nrec(Fcount)+1
+
 !
 !  Write out model time (s).
 !

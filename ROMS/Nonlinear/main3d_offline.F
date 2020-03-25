@@ -117,6 +117,9 @@
       USE wvelocity_mod, ONLY : wvelocity
       USE dateclock_mod, ONLY : time_string
 
+! KMT testing
+     !USE mod_ocean 
+
 !
       implicit none
 !
@@ -132,6 +135,9 @@
       integer :: Lend, Lstr, chunk_size
 # endif
       real(r8) :: my_StepTime
+
+      !real(r8) :: u
+
 !
 !=======================================================================
 !  Time-step nonlinear 3D primitive equations by the specified time.
@@ -162,16 +168,19 @@
 !  Read in required data, if any, from input NetCDF files.
 !-----------------------------------------------------------------------
 !
+!# if defined BLAH
         DO ng=1,Ngrids
           CALL get_data (ng)
           IF (exit_flag.ne.NoError) RETURN
         END DO
+!# endif  !blah
 !
 !-----------------------------------------------------------------------
 !  If applicable, process input data: time interpolate between data
 !  snapshots.
 !-----------------------------------------------------------------------
 !
+!# if defined BLAH
         DO ng=1,Ngrids
           DO tile=first_tile(ng),last_tile(ng),+1
             CALL set_data (ng, tile)
@@ -179,11 +188,13 @@
 !$OMP BARRIER
         END DO
         IF (exit_flag.ne.NoError) RETURN
+!# endif  ! blah
 !
 !-----------------------------------------------------------------------
 !  Initialize all time levels and compute other initial fields.
 !-----------------------------------------------------------------------
 !
+!# if defined BLAH
         DO ng=1,Ngrids
           IF (iic(ng).eq.ntstart(ng)) THEN
 !
@@ -191,7 +202,10 @@
 !  depths.
 !
             DO tile=first_tile(ng),last_tile(ng),+1
-              CALL ini_zeta (ng, tile, iNLM)
+              ! commented by KMT since I am inputting zeta. Revisit this
+              ! if want to be able to calculate zeta instead of
+              ! inputting.
+              !CALL ini_zeta (ng, tile, iNLM)
               CALL set_depth (ng, tile, iNLM)
             END DO
 !$OMP BARRIER
@@ -204,12 +218,17 @@
 !$OMP BARRIER
           END IF
         END DO
-!
+!# endif  ! blah
+! try to look at u variables, KMT
+     !u = OCEAN(ng)%u(10,15,1,1)
+     !print *, u
+     !print *, OCEAN(ng)%u(10,15,1,1) !
 !-----------------------------------------------------------------------
 !  Compute horizontal mass fluxes (Hz*u/n and Hz*v/m), density related
 !  quatities and report global diagnostics.
 !-----------------------------------------------------------------------
 !
+!# if defined BLAH
         DO ng=1,Ngrids
           DO tile=first_tile(ng),last_tile(ng),+1
             CALL set_massflux (ng, tile, iNLM)
@@ -315,7 +334,8 @@
 !
         DO ng=1,Ngrids
           DO tile=first_tile(ng),last_tile(ng),+1
-            CALL set_zeta (ng, tile)
+            ! KMT commented for all case since will be inputs
+            !CALL set_zeta (ng, tile)
 # ifdef DIAGNOSTICS
             CALL set_diags (ng, tile)
 # endif
@@ -331,6 +351,7 @@
 # ifdef NESTING
         CALL nesting (11)
 # endif
+!# endif !blah
 !
 !-----------------------------------------------------------------------
 !  If appropriate, write out fields into output NetCDF files.  Notice
@@ -343,6 +364,8 @@
           IF ((exit_flag.ne.NoError).or.                                &
      &        ((iic(ng).eq.(ntend(ng)+1)).and.(ng.eq.Ngrids))) RETURN 
         END DO
+
+!# if defined BLAH
 !
 !-----------------------------------------------------------------------
 !  Compute right-hand-side terms for 3D equations.
@@ -351,12 +374,21 @@
 # if defined OFFLINE_TPASSIVE || defined OFFLINE_BIOLOGY
         DO ng=1,Ngrids
           DO tile=first_tile(ng),last_tile(ng),+1
+!# if defined BLAH
             CALL rhs3d (ng, tile)
-# ifdef MY25_MIXING
+!# endif  ! blah
+#  if !defined OFFLINE && ( !defined MIXCLIMATOLOGY || !defined AKXCLIMATOLOGY )
+#   ifdef MY25_MIXING
             CALL my25_prestep (ng, tile)
-# elif defined GLS_MIXING
+#   elif defined GLS_MIXING
             CALL gls_prestep (ng, tile)
-# endif
+!# ifdef MY25_MIXING
+!            CALL my25_prestep (ng, tile)
+!#  elif defined GLS_MIXING
+!            CALL gls_prestep (ng, tile)
+!# endif
+#   endif
+#  endif
           END DO
 !$OMP BARRIER
         END DO
@@ -383,7 +415,6 @@
 !         CALL nesting (14)
 ! # endif
 
-
 !
 !-----------------------------------------------------------------------
 !  Time-step vertical mixing turbulent equations and passive tracer
@@ -393,11 +424,19 @@
         DO ng=1,Ngrids
           DO tile=first_tile(ng),last_tile(ng),+1
             CALL omega (ng, tile, iNLM)
-# ifdef MY25_MIXING
+# if !defined OFFLINE && ( !defined MIXCLIMATOLOGY || !defined AKXCLIMATOLOGY )
+#  ifdef MY25_MIXING
             CALL my25_corstep (ng, tile)
-# elif defined GLS_MIXING
+#  elif defined GLS_MIXING
             CALL gls_corstep (ng, tile)
+#  endif
+!# ifdef MY25_MIXING
+!            CALL my25_corstep (ng, tile)
+!# elif defined GLS_MIXING
+!            CALL gls_corstep (ng, tile)
+!# endif
 # endif
+
 # ifdef BIOLOGY
             CALL biology (ng, tile)
 # endif
@@ -412,12 +451,15 @@
 # endif
 # endif
 
+!# endif  ! blah
+
 # ifndef TS_FIXED
 !
 !-----------------------------------------------------------------------
 !  Time-step tracer equations.
 !-----------------------------------------------------------------------
 !
+
 # if defined OFFLINE_TPASSIVE || defined OFFLINE_BIOLOGY
         DO ng=1,Ngrids
           DO tile=first_tile(ng),last_tile(ng),+1
@@ -433,6 +475,8 @@
 # endif
 # endif
 # endif
+
+!# if defined BLAH
 
 # ifdef OFFLINE_FLOATS
 !
@@ -465,6 +509,7 @@
           nfm3(ng)=MOD(nfm3(ng)+1,NFT+1)
         END DO
 # endif
+!# endif ! blah
       END DO STEP_LOOP
 
       RETURN

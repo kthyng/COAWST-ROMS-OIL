@@ -45,7 +45,7 @@
       CALL wclock_on (ng, model, 12, __LINE__, __FILE__)
 # endif
 print *, 'set_massflux start. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
-     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,2)
+     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,1,2)
       CALL set_massflux_tile (ng, tile, model,                          &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        IminS, ImaxS, JminS, JmaxS,               &
@@ -65,7 +65,7 @@ print *, 'set_massflux start. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
       CALL wclock_off (ng, model, 12, __LINE__, __FILE__)
 # endif
 print *, 'set_massflux end. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
-     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,2)
+     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,1,2)
 
       RETURN
       END SUBROUTINE set_massflux

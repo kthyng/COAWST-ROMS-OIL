@@ -110,7 +110,7 @@
 
 # include "set_bounds.h"
 print *, 'set_data start. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
-     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,2)
+     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,1,2)
 !
 !  Lower and upper bounds for nontiled (global values) boundary arrays.
 !
@@ -2580,7 +2580,7 @@ print *, 'set_data start. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
       END IF
 # endif
 print *, 'set_data end. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
-     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,2)
+     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,1,2)
 
       RETURN
       END SUBROUTINE set_data_tile

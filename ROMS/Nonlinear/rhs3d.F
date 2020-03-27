@@ -81,7 +81,7 @@
 !-----------------------------------------------------------------------
 !
 print *, 'rhs3d start. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
-     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,2)
+     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,1,2)
       CALL pre_step3d (ng, tile)
 !
 # if !defined OFFLINE
@@ -218,7 +218,7 @@ print *, 'rhs3d start. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
 # endif
 # endif /* !OFFLINE */
 print *, 'rhs3d end. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
-     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,2)
+     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,1,2)
       RETURN
       END SUBROUTINE rhs3d
 !

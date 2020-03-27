@@ -66,7 +66,7 @@
       CALL wclock_on (ng, model, 14, __LINE__, __FILE__)
 # endif
 print *, 'rho_eos start. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
-     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,2)
+     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,1,2)
       CALL rho_eos_tile (ng, tile, model,                               &
      &                   LBi, UBi, LBj, UBj,                            &
      &                   IminS, ImaxS, JminS, JmaxS,                    &
@@ -98,7 +98,7 @@ print *, 'rho_eos start. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
      &                   OCEAN(ng) % pden,                              &
      &                   OCEAN(ng) % rho)
 print *, 'rho_eos end. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
-     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,2)
+     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,1,2)
 # ifdef PROFILE
       CALL wclock_off (ng, model, 14, __LINE__, __FILE__)
 # endif

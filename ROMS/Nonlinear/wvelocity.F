@@ -40,7 +40,8 @@
 !
 # include "tile.h"
 !
-print *, 'wvelocity start ', OCEAN(ng) % u(10,15,1,1)
+print *, 'wvelocity start. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
+     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%salt(10,15,1,1)
       CALL wvelocity_tile (ng, tile,                                    &
      &                     LBi, UBi, LBj, UBj,                          &
      &                     IminS, ImaxS, JminS, JmaxS,                  &
@@ -55,7 +56,8 @@ print *, 'wvelocity start ', OCEAN(ng) % u(10,15,1,1)
      &                     OCEAN(ng) % v,                               &
      &                     OCEAN(ng) % W,                               &
      &                     OCEAN(ng) % wvel)
-print *, 'wvelocity end ', OCEAN(ng) % u(10,15,1,1)
+print *, 'wvelocity end. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
+     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%salt(10,15,1,1)
       RETURN
       END SUBROUTINE wvelocity
 !

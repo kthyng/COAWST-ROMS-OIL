@@ -47,7 +47,8 @@
 # ifdef PROFILE
       CALL wclock_on (ng, model, 13, __LINE__, __FILE__)
 # endif
-print *, 'omega start ', OCEAN(ng) % u(10,15,1,1)
+print *, 'omega start. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
+     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%salt(10,15,1,1)
       CALL omega_tile (ng, tile, model,                                 &
      &                 LBi, UBi, LBj, UBj,                              &
      &                 IminS, ImaxS, JminS, JmaxS,                      &
@@ -63,7 +64,8 @@ print *, 'omega start ', OCEAN(ng) % u(10,15,1,1)
      &                 OCEAN(ng) % W_stokes,                            &
 # endif
      &                 OCEAN(ng) % W)
-print *, 'omega end ', OCEAN(ng) % u(10,15,1,1)
+print *, 'omega end. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
+     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%salt(10,15,1,1)
 # ifdef PROFILE
       CALL wclock_off (ng, model, 13, __LINE__, __FILE__)
 # endif

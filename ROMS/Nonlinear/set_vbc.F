@@ -47,7 +47,8 @@
 #  ifdef PROFILE
       CALL wclock_on (ng, iNLM, 6, __LINE__, __FILE__)
 #  endif
-print *, 'set_vbc start ', OCEAN(ng) % u(10,15,1,1)
+print *, 'set_vbc start. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
+     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%salt(10,15,1,1)
       CALL set_vbc_tile (ng, tile,                                      &
      &                   LBi, UBi, LBj, UBj,                            &
      &                   IminS, ImaxS, JminS, JmaxS,                    &
@@ -121,7 +122,8 @@ print *, 'set_vbc start ', OCEAN(ng) % u(10,15,1,1)
 #  endif
      &                   FORCES(ng) % stflx,                            &
      &                   FORCES(ng) % btflx)
-print *, 'set_vbc end ', OCEAN(ng) % u(10,15,1,1)      
+print *, 'set_vbc end. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
+     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%salt(10,15,1,1)
 #  ifdef PROFILE
       CALL wclock_off (ng, iNLM, 6, __LINE__, __FILE__)
 #  endif

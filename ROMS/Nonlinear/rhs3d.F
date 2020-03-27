@@ -80,7 +80,8 @@
 !  variables.
 !-----------------------------------------------------------------------
 !
-print *, 'rhs3d start ', OCEAN(ng) % u(10,15,1,1)
+print *, 'rhs3d start. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
+     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%salt(10,15,1,1)
       CALL pre_step3d (ng, tile)
 !
 # if !defined OFFLINE
@@ -216,7 +217,8 @@ print *, 'rhs3d start ', OCEAN(ng) % u(10,15,1,1)
       CALL uv3dmix4 (ng, tile)
 # endif
 # endif /* !OFFLINE */
-print *, 'rhs3d end ', OCEAN(ng) % u(10,15,1,1)
+print *, 'rhs3d end. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
+     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%salt(10,15,1,1)
       RETURN
       END SUBROUTINE rhs3d
 !

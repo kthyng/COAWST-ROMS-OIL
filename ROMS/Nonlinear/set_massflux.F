@@ -44,6 +44,7 @@
 # ifdef PROFILE
       CALL wclock_on (ng, model, 12, __LINE__, __FILE__)
 # endif
+print *, 'set_massflux start ', OCEAN(ng) % u(10,15,1,1)
       CALL set_massflux_tile (ng, tile, model,                          &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        IminS, ImaxS, JminS, JmaxS,               &
@@ -62,6 +63,7 @@
 # ifdef PROFILE
       CALL wclock_off (ng, model, 12, __LINE__, __FILE__)
 # endif
+print *, 'set_massflux end ', OCEAN(ng) % u(10,15,1,1)
 
       RETURN
       END SUBROUTINE set_massflux

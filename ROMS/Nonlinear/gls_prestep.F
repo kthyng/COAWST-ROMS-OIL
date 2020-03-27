@@ -46,6 +46,7 @@
 # ifdef PROFILE
       CALL wclock_on (ng, iNLM, 19, __LINE__, __FILE__)
 # endif
+print *, 'gls_prestep start ', OCEAN(ng) % u(10,15,1,1)
       CALL gls_prestep_tile (ng, tile,                                  &
      &                       LBi, UBi, LBj, UBj,                        &
      &                       IminS, ImaxS, JminS, JmaxS,                &
@@ -65,6 +66,7 @@
 # endif
      &                       MIXING(ng) % gls,                          &
      &                       MIXING(ng) % tke)
+print *, 'gls_prestep end ', OCEAN(ng) % u(10,15,1,1)
 # ifdef PROFILE
       CALL wclock_off (ng, iNLM, 19, __LINE__, __FILE__)
 # endif

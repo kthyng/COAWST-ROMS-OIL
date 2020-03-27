@@ -109,6 +109,7 @@
       real(r8) :: cff, cff1, cff2
 
 # include "set_bounds.h"
+print *, 'set_data start ', OCEAN(ng) % u(10,15,1,1)
 !
 !  Lower and upper bounds for nontiled (global values) boundary arrays.
 !
@@ -2577,6 +2578,7 @@
 #  endif
       END IF
 # endif
+print *, 'set_data end ', OCEAN(ng) % u(10,15,1,1)
 
       RETURN
       END SUBROUTINE set_data_tile

@@ -539,7 +539,7 @@
      &                    ubar(:,:,knew), vbar(:,:,knew))
 #  endif
 
-# else
+# elif !defined OFFLINE
 !
 !-----------------------------------------------------------------------
 !  If not perfect restart, initialize other time levels for 2D momentum.

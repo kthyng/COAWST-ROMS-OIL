@@ -109,8 +109,9 @@
       real(r8) :: cff, cff1, cff2
 
 # include "set_bounds.h"
-print *, 'set_data start. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
-     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,1,2)
+print *, 'S u(1): ', OCEAN(ng)%u(10,15,1,1), ', u(2): ', OCEAN(ng)%u(10,15,1,1),', uclm: ', CLIMA(ng)%uclm(10,15,1)
+print *, 'S ubar(1): ', OCEAN(ng)%ubar(10,15,1), ', ubar(2): ',OCEAN(ng)%u(10,15,1), ', ubarclm: ', CLIMA(ng)%ubarclm(10,15)
+print *, 'S salt(1): ', OCEAN(ng)%t(10,15,1,1,2), ', salt(2): ',OCEAN(ng)%t(10,15,1,2,2), ', saltclm: ', CLIMA(ng)%tclm(10,15,1,2)
 !
 !  Lower and upper bounds for nontiled (global values) boundary arrays.
 !
@@ -2579,8 +2580,9 @@ print *, 'set_data start. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
 #  endif
       END IF
 # endif
-print *, 'set_data end. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
-     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,1,2)
+print *, 'E u(1): ', OCEAN(ng)%u(10,15,1,1), ', u(2): ', OCEAN(ng)%u(10,15,1,1), ', uclm: ', CLIMA(ng)%uclm(10,15,1)  
+print *, 'E ubar(1): ', OCEAN(ng)%ubar(10,15,1), ', ubar(2): ', OCEAN(ng)%u(10,15,1), ', ubarclm: ', CLIMA(ng)%ubarclm(10,15)
+print *, 'E salt(1): ', OCEAN(ng)%t(10,15,1,1,2), ', salt(2): ', OCEAN(ng)%t(10,15,1,2,2), ', saltclm: ', CLIMA(ng)%tclm(10,15,1,2)
 
       RETURN
       END SUBROUTINE set_data_tile

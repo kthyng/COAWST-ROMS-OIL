@@ -763,6 +763,7 @@
 !
 !  Write out 3D U-momentum component (m/s).
 !
+print *, 'wrt_his: ', OCEAN(ng) % u(10,15,1,NOUT)
       IF (Hout(idUvel,ng)) THEN
         scale=1.0_r8
         gtype=gfactor*u3dvar
@@ -5071,6 +5072,7 @@
       IF (FoundError(exit_flag, NoError, __LINE__,                      &
      &               __FILE__)) RETURN
 
+print *, 'KOUT: ', KOUT, 'NOUT: ', NOUT
 #ifdef SOLVE3D
 # ifdef NESTING
       IF (Master) WRITE (stdout,20) KOUT, NOUT, HIS(ng)%Rindex, ng

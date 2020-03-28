@@ -719,6 +719,7 @@
                   END IF
                   knew(ng)=3
                   krhs(ng)=indx1(ng)
+                  print *, 'krhs (predictor): ', krhs(ng)
                 END IF
 !
 !  Predictor step - Advance barotropic equations using 2D time-step
@@ -769,6 +770,7 @@
                   krhs(ng)=3
                   IF (iif(ng).lt.(nfast(ng)+1)) indx1(ng)=next_indx1
                 END IF
+print *, 'krhs (corrector): ', krhs(ng)
 !
 !  Corrector step - Apply 2D time-step corrector scheme.  Notice that
 !  ==============   there is not need for a corrector step during the

@@ -110,7 +110,7 @@
 
 # include "set_bounds.h"
 print *, 'S u(1): ', OCEAN(ng)%u(10,15,1,1), ', u(2): ', OCEAN(ng)%u(10,15,1,1),', uclm: ', CLIMA(ng)%uclm(10,15,1)
-print *, 'S ubar(1): ', OCEAN(ng)%ubar(10,15,1), ', ubar(2): ',OCEAN(ng)%u(10,15,1), ', ubarclm: ', CLIMA(ng)%ubarclm(10,15)
+print *, 'S ubar(1): ', OCEAN(ng)%ubar(10,15,1), ', ubar(2): ',OCEAN(ng)%ubar(10,15,1), ', ubarclm: ', CLIMA(ng)%ubarclm(10,15)
 print *, 'S salt(1): ', OCEAN(ng)%t(10,15,1,1,2), ', salt(2): ',OCEAN(ng)%t(10,15,1,2,2), ', saltclm: ', CLIMA(ng)%tclm(10,15,1,2)
 !
 !  Lower and upper bounds for nontiled (global values) boundary arrays.
@@ -2106,6 +2106,7 @@ print *, 'S salt(1): ', OCEAN(ng)%t(10,15,1,1,2), ', salt(2): ',OCEAN(ng)%t(10,1
         IF (FoundError(exit_flag, NoError, __LINE__,                    &
      &                 __FILE__)) RETURN
 #  endif
+print *, 'nnew(ng): ', nnew(ng)
 #  if defined OFFLINE
         DO k=1,N(ng)
           DO j=Jstr-1,Jend+1
@@ -2581,7 +2582,7 @@ print *, 'S salt(1): ', OCEAN(ng)%t(10,15,1,1,2), ', salt(2): ',OCEAN(ng)%t(10,1
       END IF
 # endif
 print *, 'E u(1): ', OCEAN(ng)%u(10,15,1,1), ', u(2): ', OCEAN(ng)%u(10,15,1,1), ', uclm: ', CLIMA(ng)%uclm(10,15,1)  
-print *, 'E ubar(1): ', OCEAN(ng)%ubar(10,15,1), ', ubar(2): ', OCEAN(ng)%u(10,15,1), ', ubarclm: ', CLIMA(ng)%ubarclm(10,15)
+print *, 'E ubar(1): ', OCEAN(ng)%ubar(10,15,1), ', ubar(2): ', OCEAN(ng)%ubar(10,15,1), ', ubarclm: ', CLIMA(ng)%ubarclm(10,15)
 print *, 'E salt(1): ', OCEAN(ng)%t(10,15,1,1,2), ', salt(2): ', OCEAN(ng)%t(10,15,1,2,2), ', saltclm: ', CLIMA(ng)%tclm(10,15,1,2)
 
       RETURN

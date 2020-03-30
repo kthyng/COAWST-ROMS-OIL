@@ -213,9 +213,7 @@
 !  Initialize other state variables.
 !
             DO tile=first_tile(ng),last_tile(ng),+1
-              ! commented by KMT to see if fix time stepping issue for
-              ! 3d u
-              !CALL ini_fields (ng, tile, iNLM)
+              CALL ini_fields (ng, tile, iNLM)
             END DO
 !$OMP BARRIER
           END IF

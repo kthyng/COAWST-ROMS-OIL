@@ -109,8 +109,8 @@
       real(r8) :: cff, cff1, cff2
 
 # include "set_bounds.h"
-print *, 'S u(1): ', OCEAN(ng)%u(10,15,1,1), ', u(2): ', OCEAN(ng)%u(10,15,1,1),', uclm: ', CLIMA(ng)%uclm(10,15,1)
-print *, 'S ubar(1): ', OCEAN(ng)%ubar(10,15,1), ', ubar(2): ',OCEAN(ng)%ubar(10,15,1), ', ubarclm: ', CLIMA(ng)%ubarclm(10,15)
+print *, 'S u(1): ', OCEAN(ng)%u(10,15,1,1), ', u(2): ', OCEAN(ng)%u(10,15,1,2),', uclm: ', CLIMA(ng)%uclm(10,15,1)
+print *, 'S ubar(1): ', OCEAN(ng)%ubar(10,15,1), ', ubar(2): ',OCEAN(ng)%ubar(10,15,2), ', ubarclm: ', CLIMA(ng)%ubarclm(10,15)
 print *, 'S salt(1): ', OCEAN(ng)%t(10,15,1,1,2), ', salt(2): ',OCEAN(ng)%t(10,15,1,2,2), ', saltclm: ', CLIMA(ng)%tclm(10,15,1,2)
 !
 !  Lower and upper bounds for nontiled (global values) boundary arrays.
@@ -2581,8 +2581,8 @@ print *, 'nnew(ng): ', nnew(ng)
 #  endif
       END IF
 # endif
-print *, 'E u(1): ', OCEAN(ng)%u(10,15,1,1), ', u(2): ', OCEAN(ng)%u(10,15,1,1), ', uclm: ', CLIMA(ng)%uclm(10,15,1)  
-print *, 'E ubar(1): ', OCEAN(ng)%ubar(10,15,1), ', ubar(2): ', OCEAN(ng)%ubar(10,15,1), ', ubarclm: ', CLIMA(ng)%ubarclm(10,15)
+print *, 'E u(1): ', OCEAN(ng)%u(10,15,1,1), ', u(2): ', OCEAN(ng)%u(10,15,1,2), ', uclm: ', CLIMA(ng)%uclm(10,15,1)  
+print *, 'E ubar(1): ', OCEAN(ng)%ubar(10,15,1), ', ubar(2): ', OCEAN(ng)%ubar(10,15,2), ', ubarclm: ', CLIMA(ng)%ubarclm(10,15)
 print *, 'E salt(1): ', OCEAN(ng)%t(10,15,1,1,2), ', salt(2): ', OCEAN(ng)%t(10,15,1,2,2), ', saltclm: ', CLIMA(ng)%tclm(10,15,1,2)
 
       RETURN

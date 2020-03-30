@@ -2111,8 +2111,14 @@ print *, 'nnew(ng): ', nnew(ng)
         DO k=1,N(ng)
           DO j=Jstr-1,Jend+1
             DO i=Istr-1,Iend+1
-              OCEAN(ng)%u(i,j,k,nnew(ng)) = CLIMA(ng)%uclm(i,j,k)
-              OCEAN(ng)%v(i,j,k,nnew(ng)) = CLIMA(ng)%vclm(i,j,k)
+              ! KMT change to fix time stepping shift between 3D u 
+              ! and ubar
+              OCEAN(ng)%u(i,j,k,1) = CLIMA(ng)%uclm(i,j,k)
+              OCEAN(ng)%u(i,j,k,2) = CLIMA(ng)%uclm(i,j,k)
+              OCEAN(ng)%v(i,j,k,1) = CLIMA(ng)%vclm(i,j,k)
+              OCEAN(ng)%v(i,j,k,2) = CLIMA(ng)%vclm(i,j,k)
+!              OCEAN(ng)%u(i,j,k,nnew(ng)) = CLIMA(ng)%uclm(i,j,k)
+!              OCEAN(ng)%v(i,j,k,nnew(ng)) = CLIMA(ng)%vclm(i,j,k)
             END DO
           END DO
         END DO
@@ -2169,8 +2175,12 @@ print *, 'nnew(ng): ', nnew(ng)
         DO k=1,N(ng)
           DO j=Jstr-1,Jend+1
             DO i=Istr-1,Iend+1
-              OCEAN(ng)%t(i,j,k,nnew(ng),itrc) =                        &
-     &                  CLIMA(ng)%tclm(i,j,k,itrc)
+              ! KMT changed so that both time steps set at once for 3D 
+              ! fields instead of altenating
+              OCEAN(ng)%t(i,j,k,1,itrc) = CLIMA(ng)%tclm(i,j,k,itrc)
+              OCEAN(ng)%t(i,j,k,2,itrc) = CLIMA(ng)%tclm(i,j,k,itrc)
+!              OCEAN(ng)%t(i,j,k,nnew(ng),itrc) =                        &
+!     &                  CLIMA(ng)%tclm(i,j,k,itrc)
             ENDDO
           ENDDO
         ENDDO

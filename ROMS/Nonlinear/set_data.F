@@ -2259,7 +2259,7 @@ print *, 'nnew(ng): ', nnew(ng)
 !-----------------------------------------------------------------------
 !
 print *, 'S om(1): ', OCEAN(ng)%W(10,15,25), ', om(2): ', OCEAN(ng)%W(10,15,25),
-', omclmG: ', CLIMA(ng)%oclmG(10,15,25)
+', omclm: ', CLIMA(ng)%oclm(10,15,25)
 #  ifdef ANA_OCLIMA
       CALL ana_oclima (ng, tile, iNLM)
 #  else

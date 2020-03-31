@@ -2345,6 +2345,35 @@ print *, 'nnew(ng): ', nnew(ng)
      &                     CLIMA(ng)%AKtclm,                            &
      &                     update)
 #  endif
+#  if defined AKSCLIMATOLOGY || defined AKXCLIMATOLOGY
+      CALL set_3dfld_tile (ng, tile, iNLM, idAKsclm,                    &
+     &                       LBi, UBi, LBj, UBj, 0, N(ng),              &
+     &                       CLIMA(ng)%AKsclmG,                         &
+     &                       CLIMA(ng)%AKsclm,                          &
+     &                       update)
+#  endif
+#  if defined AKVCLIMATOLOGY || defined AKXCLIMATOLOGY
+      CALL set_3dfld_tile (ng, tile, iNLM, idAKvclm,                    &
+     &                       LBi, UBi, LBj, UBj, 0, N(ng),              &
+     &                       CLIMA(ng)%AKvclmG,                         &
+     &                       CLIMA(ng)%AKvclm,                          &
+     &                       update)
+#  endif
+!      DO k=1,3
+#  if defined TKECLIMATOLOGY || defined MIXCLIMATOLOGY
+         CALL set_3dfld_tile (ng, tile, iNLM, idtkeclm,                 &
+     &                       LBi, UBi, LBj, UBj, 0, N(ng),              &
+     &                       CLIMA(ng)%tkeclmG,                         &
+     &                       CLIMA(ng)%tkeclm ,                 &
+     &                       update)
+#  endif
+#  if defined GLSCLIMATOLOGY || defined MIXCLIMATOLOGY
+         CALL set_3dfld_tile (ng, tile, iNLM, idglsclm,                 &
+     &                       LBi, UBi, LBj, UBj, 0, N(ng),              &
+     &                       CLIMA(ng)%glsclmG,                         &
+     &                       CLIMA(ng)%glsclm,                 &
+     &                       update)
+#  endif
 
 #  if defined OFFLINE && !defined ANA_VMIX
       DO k=0,N(ng)
@@ -2380,35 +2409,6 @@ print *, 'nnew(ng): ', nnew(ng)
      &                    NghostPoints,                                 &
      &                    EWperiodic(ng), NSperiodic(ng),               &
      &                    MIXING(ng)%Akt(:,:,:,1))
-#  endif
-#  if defined AKSCLIMATOLOGY || defined AKXCLIMATOLOGY
-      CALL set_3dfld_tile (ng, tile, iNLM, idAKsclm,                    &
-     &                       LBi, UBi, LBj, UBj, 0, N(ng),              &
-     &                       CLIMA(ng)%AKsclmG,                         &
-     &                       CLIMA(ng)%AKsclm,                          &
-     &                       update)
-#  endif
-#  if defined AKVCLIMATOLOGY || defined AKXCLIMATOLOGY
-      CALL set_3dfld_tile (ng, tile, iNLM, idAKvclm,                    &
-     &                       LBi, UBi, LBj, UBj, 0, N(ng),              &
-     &                       CLIMA(ng)%AKvclmG,                         &
-     &                       CLIMA(ng)%AKvclm,                          &
-     &                       update)
-#  endif
-!      DO k=1,3
-#  if defined TKECLIMATOLOGY || defined MIXCLIMATOLOGY
-         CALL set_3dfld_tile (ng, tile, iNLM, idtkeclm,                 &
-     &                       LBi, UBi, LBj, UBj, 0, N(ng),              &
-     &                       CLIMA(ng)%tkeclmG,                         &
-     &                       CLIMA(ng)%tkeclm ,                 &
-     &                       update)
-#  endif
-#  if defined GLSCLIMATOLOGY || defined MIXCLIMATOLOGY
-         CALL set_3dfld_tile (ng, tile, iNLM, idglsclm,                 &
-     &                       LBi, UBi, LBj, UBj, 0, N(ng),              &
-     &                       CLIMA(ng)%glsclmG,                         &
-     &                       CLIMA(ng)%glsclm,                 &
-     &                       update)
 #  endif
 !      ENDDO
 

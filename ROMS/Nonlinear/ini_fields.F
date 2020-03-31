@@ -421,7 +421,7 @@
 #  endif
 # endif
 
-# ifdef SOLVE3D && !OFFLINE
+# if defined SOLVE3D && !defined OFFLINE
 !-----------------------------------------------------------------------
 !  If not perfect restart, compute vertically-integrated momentum
 !  (ubar, vbar) from initial 3D momentum (u, v).
@@ -647,7 +647,7 @@
 #  endif
 # endif
 
-# ifdef SOLVE3D && !OFFLINE
+# if defined SOLVE3D && !defined OFFLINE
 !
 !-----------------------------------------------------------------------
 !  If not perfect restart, initialize other time levels for tracers.

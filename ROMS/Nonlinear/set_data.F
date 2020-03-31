@@ -2389,10 +2389,15 @@ print *, 'nnew(ng): ', nnew(ng)
             MIXING(ng)%Akv(i,j,k) = CLIMA(ng)%AKvclm(i,j,k)
 #  endif
 #  if defined TKECLIMATOLOGY || defined MIXCLIMATOLOGY
-            MIXING(ng)%tke(i,j,k,nnew(ng)) = CLIMA(ng)%tkeclm(i,j,k)
+            ! KMT: set both time steps to match climatology for offline
+            MIXING(ng)%tke(i,j,k,1) = CLIMA(ng)%tkeclm(i,j,k)
+            MIXING(ng)%tke(i,j,k,2) = CLIMA(ng)%tkeclm(i,j,k)
+!            MIXING(ng)%tke(i,j,k,nnew(ng)) = CLIMA(ng)%tkeclm(i,j,k)
 #  endif
 #  if defined GLSCLIMATOLOGY || defined MIXCLIMATOLOGY
-            MIXING(ng)%gls(i,j,k,nnew(ng)) = CLIMA(ng)%glsclm(i,j,k)
+            MIXING(ng)%gls(i,j,k,1) = CLIMA(ng)%glsclm(i,j,k)
+            MIXING(ng)%gls(i,j,k,2) = CLIMA(ng)%glsclm(i,j,k)
+!            MIXING(ng)%gls(i,j,k,nnew(ng)) = CLIMA(ng)%glsclm(i,j,k)
 #  endif
           ENDDO
         ENDDO

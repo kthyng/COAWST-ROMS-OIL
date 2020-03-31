@@ -423,7 +423,9 @@
 !
         DO ng=1,Ngrids
           DO tile=first_tile(ng),last_tile(ng),+1
+# if !defined OCLIMATOLOGY
             CALL omega (ng, tile, iNLM)
+# endif
 # if !defined OFFLINE && ( !defined MIXCLIMATOLOGY || !defined AKXCLIMATOLOGY )
 #  ifdef MY25_MIXING
             CALL my25_corstep (ng, tile)

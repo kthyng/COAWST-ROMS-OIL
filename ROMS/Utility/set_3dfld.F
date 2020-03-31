@@ -148,6 +148,9 @@
             END DO
           END DO
         END IF
+print *, Lonerec, Lgrided, fac1*fac2, fac1+fac2, fac1, fac2
+print *, 'Finp(1): ', Finp(10,15,25,1), ' Finp(2): ', Finp(10,15,25,2)
+print *, 'Fout: ', Fout(10,15,25)
 !
 !  Activate synchronization flag if a new time record needs to be
 !  read in at the next time step.

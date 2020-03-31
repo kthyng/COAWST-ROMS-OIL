@@ -1955,7 +1955,7 @@
 # if !defined ANA_OCLIMA && defined OCLIMATOLOGY
       CALL get_3dfld (ng, iNLM, idOclm, ncCLMid(idOclm,ng),             &
      &                nCLMfiles(ng), CLM(1,ng), update(1),              &
-     &                LBi, UBi, LBj, UBj, 1, N(ng), 2, 1,               &
+     &                LBi, UBi, LBj, UBj, 0, N(ng), 2, 1,               &
 #  ifdef MASKING
      &                GRID(ng) % rmask,                                 &
 #  endif

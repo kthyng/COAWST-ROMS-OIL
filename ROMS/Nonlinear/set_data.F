@@ -2077,6 +2077,8 @@
 # endif
       END IF
 
+print *, 'S u(1): ', OCEAN(ng)%u(10,15,25,1), ' u(2): ', OCEAN(ng)%u(10,15,25,2) 
+print *, 'uclmG(1): ', CLIMA(ng)%uclmG(10,15,25,1), 'uclmG(2): ',CLIMA(ng)%uclmG(10,15,25,2)
 # ifdef SOLVE3D
 !
 !-----------------------------------------------------------------------
@@ -2103,7 +2105,6 @@
         IF (FoundError(exit_flag, NoError, __LINE__,                    &
      &                 __FILE__)) RETURN
 #  endif
-print *, 'nnew(ng): ', nnew(ng)
 #  if defined OFFLINE
         DO k=1,N(ng)
           DO j=Jstr-1,Jend+1
@@ -2141,6 +2142,7 @@ print *, 'nnew(ng): ', nnew(ng)
 
 #  endif
       END IF
+print *, 'E u: ', OCEAN(ng)%u(10,15,25,1), ', uclm: ', CLIMA(ng)%uclm(10,15,25)
 !
 !-----------------------------------------------------------------------
 !  Set tracers climatology.
@@ -2258,7 +2260,9 @@ print *, 'nnew(ng): ', nnew(ng)
 !  Set omega climatology.
 !-----------------------------------------------------------------------
 !
-print *, 'S om(1): ', OCEAN(ng)%W(10,15,25), ', om(2): ', OCEAN(ng)%W(10,15,25), ', omclm: ', CLIMA(ng)%oclm(10,15,25)
+print *, 'S om: ', OCEAN(ng)%W(10,15,25)
+print *, 'omclmG(1): ', CLIMA(ng)%oclmG(10,15,25,1), 'omclmG(2): ', CLIMA(ng)%oclmG(10,15,25,2)
+print *, 'pm: ', GRID(ng)%pm(10,15), ', pn: ', GRID(ng)%pn(10,15)
 #  ifdef ANA_OCLIMA
       CALL ana_oclima (ng, tile, iNLM)
 #  else
@@ -2291,6 +2295,7 @@ print *, 'S om(1): ', OCEAN(ng)%W(10,15,25), ', om(2): ', OCEAN(ng)%W(10,15,25),
 #   endif
 #  endif
 # endif
+print *, 'E om: ', OCEAN(ng)%W(10,15,25), ', omclm: ', CLIMA(ng)%oclm(10,15,25)
 
 # if defined SOLVE3D && defined OFFLINE
 !
@@ -2594,7 +2599,6 @@ print *, 'S om(1): ', OCEAN(ng)%W(10,15,25), ', om(2): ', OCEAN(ng)%W(10,15,25),
 #  endif
       END IF
 # endif
-print *, 'E om(1): ', OCEAN(ng)%W(10,15,25), ', om(2): ', OCEAN(ng)%W(10,15,25), ', omclm: ', CLIMA(ng)%oclm(10,15,25)  
 
       RETURN
       END SUBROUTINE set_data_tile

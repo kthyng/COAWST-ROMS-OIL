@@ -364,10 +364,10 @@
             END DO
           END IF
         END DO
+# if !defined OFFLINE
 !
 !  Apply boundary conditions.
 !
-# if !defined OFFLINE
         CALL u3dbc_tile (ng, tile,                                      &
      &                   LBi, UBi, LBj, UBj, N(ng),                     &
      &                   IminS, ImaxS, JminS, JmaxS,                    &
@@ -421,7 +421,7 @@
 #  endif
 # endif
 
-# ifdef SOLVE3D && !defined OFFLINE
+# ifdef SOLVE3D && !OFFLINE
 !-----------------------------------------------------------------------
 !  If not perfect restart, compute vertically-integrated momentum
 !  (ubar, vbar) from initial 3D momentum (u, v).
@@ -647,7 +647,7 @@
 #  endif
 # endif
 
-# ifdef SOLVE3D && !defined OFFLINE
+# ifdef SOLVE3D && !OFFLINE
 !
 !-----------------------------------------------------------------------
 !  If not perfect restart, initialize other time levels for tracers.

@@ -763,7 +763,6 @@
 !
 !  Write out 3D U-momentum component (m/s).
 !
-print *, 'wrt_his: ', OCEAN(ng) % u(10,15,1,NOUT)
       IF (Hout(idUvel,ng)) THEN
         scale=1.0_r8
         gtype=gfactor*u3dvar
@@ -958,6 +957,7 @@ print *, 'wrt_his: ', OCEAN(ng) % u(10,15,1,NOUT)
 !
 !  Write out S-coordinate omega vertical velocity (m/s).
 !
+print *, 'wrt_his: ', OCEAN(ng) % W(10,15,25)
       IF (Hout(idOvel,ng)) THEN
         IF (.not.allocated(Wr3d)) THEN
           allocate (Wr3d(LBi:UBi,LBj:UBj,0:N(ng)))
@@ -5072,7 +5072,6 @@ print *, 'wrt_his: ', OCEAN(ng) % u(10,15,1,NOUT)
       IF (FoundError(exit_flag, NoError, __LINE__,                      &
      &               __FILE__)) RETURN
 
-print *, 'KOUT: ', KOUT, 'NOUT: ', NOUT
 #ifdef SOLVE3D
 # ifdef NESTING
       IF (Master) WRITE (stdout,20) KOUT, NOUT, HIS(ng)%Rindex, ng

@@ -40,7 +40,6 @@
 !
 # include "tile.h"
 !
-!print *, 'wvelocity start. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
 !     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,1,2)
       CALL wvelocity_tile (ng, tile,                                    &
      &                     LBi, UBi, LBj, UBj,                          &
@@ -56,8 +55,6 @@
      &                     OCEAN(ng) % v,                               &
      &                     OCEAN(ng) % W,                               &
      &                     OCEAN(ng) % wvel)
-!print *, 'wvelocity end. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
-!     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,1,2)
       RETURN
       END SUBROUTINE wvelocity
 !
@@ -265,7 +262,6 @@
      &                    EWperiodic(ng), NSperiodic(ng),               &
      &                    wvel)
 # endif
-
       RETURN
       END SUBROUTINE wvelocity_tile
 #endif

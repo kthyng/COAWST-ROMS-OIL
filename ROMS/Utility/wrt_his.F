@@ -957,7 +957,6 @@
 !
 !  Write out S-coordinate omega vertical velocity (m/s).
 !
-print *, 'wrt_his, W: ', OCEAN(ng) % W(10,15,25)
       IF (Hout(idOvel,ng)) THEN
         IF (.not.allocated(Wr3d)) THEN
           allocate (Wr3d(LBi:UBi,LBj:UBj,0:N(ng)))
@@ -970,7 +969,6 @@ print *, 'wrt_his, W: ', OCEAN(ng) % W(10,15,25)
      &                    GRID(ng) % pn,                                &
      &                    OCEAN(ng) % W,                                &
      &                    Wr3d)
-print *, 'wrt_his, om: ', Wr3d(10,15,25)
         status=nf_fwrite3d(ng, iNLM, HIS(ng)%ncid, HIS(ng)%Vid(idOvel), &
      &                     HIS(ng)%Rindex, gtype,                       &
      &                     LBi, UBi, LBj, UBj, 0, N(ng), scale,         &

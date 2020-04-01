@@ -2077,8 +2077,6 @@
 # endif
       END IF
 
-print *, 'S u(1): ', OCEAN(ng)%u(10,15,25,1), ' u(2): ', OCEAN(ng)%u(10,15,25,2) 
-print *, 'uclmG(1): ', CLIMA(ng)%uclmG(10,15,25,1), 'uclmG(2): ',CLIMA(ng)%uclmG(10,15,25,2)
 # ifdef SOLVE3D
 !
 !-----------------------------------------------------------------------
@@ -2142,7 +2140,6 @@ print *, 'uclmG(1): ', CLIMA(ng)%uclmG(10,15,25,1), 'uclmG(2): ',CLIMA(ng)%uclmG
 
 #  endif
       END IF
-print *, 'E u: ', OCEAN(ng)%u(10,15,25,1), ', uclm: ', CLIMA(ng)%uclm(10,15,25)
 !
 !-----------------------------------------------------------------------
 !  Set tracers climatology.
@@ -2260,9 +2257,6 @@ print *, 'E u: ', OCEAN(ng)%u(10,15,25,1), ', uclm: ', CLIMA(ng)%uclm(10,15,25)
 !  Set omega climatology.
 !-----------------------------------------------------------------------
 !
-print *, 'S om: ', OCEAN(ng)%W(10,15,25)
-print *, 'omclmG(1): ', CLIMA(ng)%oclmG(10,15,25,1), 'omclmG(2): ', CLIMA(ng)%oclmG(10,15,25,2)
-print *, 'pm: ', GRID(ng)%pm(10,15), ', pn: ', GRID(ng)%pn(10,15)
 #  ifdef ANA_OCLIMA
       CALL ana_oclima (ng, tile, iNLM)
 #  else
@@ -2295,7 +2289,6 @@ print *, 'pm: ', GRID(ng)%pm(10,15), ', pn: ', GRID(ng)%pn(10,15)
 #   endif
 #  endif
 # endif
-print *, 'E om: ', OCEAN(ng)%W(10,15,25), ', omclm: ', CLIMA(ng)%oclm(10,15,25)
 
 # if defined SOLVE3D && defined OFFLINE
 !

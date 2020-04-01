@@ -69,7 +69,6 @@
 # ifdef PROFILE
       CALL wclock_on (ng, iNLM, 19, __LINE__, __FILE__)
 # endif
-print *, 'gls_corstep start ', OCEAN(ng) % u(10,15,1,1)
       CALL gls_corstep_tile (ng, tile,                                  &
      &                       LBi, UBi, LBj, UBj,                        &
      &                       IminS, ImaxS, JminS, JmaxS,                &
@@ -115,7 +114,6 @@ print *, 'gls_corstep start ', OCEAN(ng) % u(10,15,1,1)
      &                       MIXING(ng) % Lscale,                       &
      &                       MIXING(ng) % gls,                          &
      &                       MIXING(ng) % tke)
-print *, 'gls_corstep end ', OCEAN(ng) % u(10,15,1,1)
 # ifdef PROFILE
       CALL wclock_off (ng, iNLM, 19, __LINE__, __FILE__)
 # endif

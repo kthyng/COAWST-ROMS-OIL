@@ -105,7 +105,7 @@
       USE set_tides_mod, ONLY : set_tides
 # endif
       USE set_vbc_mod, ONLY : set_vbc
-      USE set_zeta_mod, ONLY : set_zeta
+      USE set_zeta_mod, ONLY : set_zeta, set_avg_zeta
       USE step2d_mod, ONLY : step2d
 # ifndef TS_FIXED
       USE step3d_t_mod, ONLY : step3d_t
@@ -206,6 +206,7 @@
               ! if want to be able to calculate zeta instead of
               ! inputting.
               !CALL ini_zeta (ng, tile, iNLM)
+              CALL set_avg_zeta(ng, tile)  ! to initialize Zt_avg1
               CALL set_depth (ng, tile, iNLM)
             END DO
 !$OMP BARRIER
@@ -397,23 +398,23 @@
 # endif
 
 
-! !
-! !-----------------------------------------------------------------------
-! !  Recompute depths and thicknesses using the new time filtered
-! !  free-surface.
-! !  check this
-! !-----------------------------------------------------------------------
-! !
-!         DO ig=1,GridsInLayer(nl)
-!           ng=GridNumber(ig,nl)
-!           DO tile=first_tile(ng),last_tile(ng),+1
-!             CALL set_depth (ng, tile, iNLM)
-!           END DO
-! !$OMP BARRIER
-!         END DO
-! # ifdef NESTING
-!         CALL nesting (14)
-! # endif
+!
+!-----------------------------------------------------------------------
+!  Recompute depths and thicknesses using the new time filtered
+!  free-surface.
+!  check this
+!-----------------------------------------------------------------------
+!
+        DO ng=1,Ngrids
+          DO tile=first_tile(ng),last_tile(ng),+1
+            CALL set_avg_zeta (ng, tile)
+            CALL set_depth (ng, tile, iNLM)
+          END DO
+!$OMP BARRIER
+        END DO
+# ifdef NESTING
+        CALL nesting (14)
+# endif
 
 !
 !-----------------------------------------------------------------------

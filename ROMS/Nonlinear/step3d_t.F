@@ -380,6 +380,7 @@
       JLB=BOUNDS(ng)%LBj(-1)
       JUB=BOUNDS(ng)%UBj(-1)
 # endif
+print *, '1 ', t(10,15,25,:,3)
 !
 !-----------------------------------------------------------------------
 !  Time-step horizontal advection term.
@@ -782,6 +783,7 @@
 # endif
         END DO K_LOOP
       END DO T_LOOP
+print *, '2 ', t(10,15,25,:,3)
 !
 !-----------------------------------------------------------------------
 !  Time-step vertical advection term.
@@ -1275,6 +1277,7 @@
 # undef J_RANGE
 # ifdef TS_MPDATA
       END DO
+print *, '3 ', t(10,15,25,:,3)
 !
 !-----------------------------------------------------------------------
 !  Compute anti-diffusive velocities to corrected advected tracers
@@ -1365,6 +1368,7 @@
             FC(i,0)=0.0_r8
             FC(i,N(ng))=0.0_r8
           END DO
+print *, '4 ', t(10,15,25,:,3)
 !
 !  Time-step corrected vertical advection (Tunits).
 #  ifdef DIAGNOSTICS_TS
@@ -1390,6 +1394,7 @@
           END DO
         END DO
       END DO
+print *, '5 ', t(10,15,25,:,3)
 !
 !  Start pipelined J-loop.
 !
@@ -1511,6 +1516,7 @@
               DC(i,k)=cff*(DC(i,k)-FC(i,k-1)*DC(i,k-1))
             END DO
           END DO
+print *, '6 ', t(10,15,25,:,3)
 !
 !  Compute new solution by back substitution.
 !
@@ -1543,6 +1549,7 @@
 # endif
         END DO
       END DO
+print *, '7 ', t(10,15,25,:,3)
 
 # if defined AGE_MEAN && defined T_PASSIVE
 !
@@ -1577,6 +1584,7 @@
         END DO
       END DO
 # endif
+print *, '8 ', t(10,15,25,:,3)
 # if defined TRC_PSOURCE
 !
 !  Apply tracers point sources to the horizontal advection terms.
@@ -1605,6 +1613,7 @@
           END DO
         END DO
 # endif
+print *, '9 ', t(10,15,25,:,3)
 !-----------------------------------------------------------------------
 !  Apply lateral boundary conditions and, if appropriate, nudge
 !  to tracer data and apply Land/Sea mask.
@@ -1655,6 +1664,7 @@
             END DO
           END DO
         END IF
+print *, '10 ', t(10,15,25,:,3)
 
 # ifdef MASKING
 !
@@ -1717,6 +1727,7 @@
         END DO
       END DO
 # endif
+print *, '11 ', t(10,15,25,:,3)
 # ifdef DISTRIBUTE
 !
 !  Exchange boundary data.

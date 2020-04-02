@@ -2003,6 +2003,8 @@
         IF (FoundError(exit_flag, NoError, __LINE__,                    &
      &                 __FILE__)) RETURN
 # endif
+print *, 'sshGclm(1): ', CLIMA(ng)%sshG(10,15,1), 'sshGclm(2): ', CLIMA(ng)%sshG(10,15,2)
+print *, 'sshclm: ', CLIMA(ng)%ssh(10,15)
 # if defined OFFLINE
         DO j=Jstr-1,Jend+1
           DO i=Istr-1,Iend+1

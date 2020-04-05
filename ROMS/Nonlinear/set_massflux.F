@@ -163,6 +163,7 @@ print *, 'set_massflux: Zt_avg1: ',  COUPLING(ng) % Zt_avg1(10,15)
           END DO
         END DO
       END DO
+print *, 'HUON: ', HUON(10,15,25)
 !
 !  Exchange boundary information.
 !

@@ -107,6 +107,12 @@
       integer :: i, ic, itrc, j, k, my_tile, l
 
       real(r8) :: cff, cff1, cff2
+      !integer :: Tindex
+
+# ifdef OFFLINE
+      real(r8) :: sshtemp(LBi:UBi,LBj:UBj)
+      integer :: Tindex
+# endif
 
 # include "set_bounds.h"
 !
@@ -2005,11 +2011,63 @@
 # endif
 print *, 'sshGclm(1): ', CLIMA(ng)%sshG(10,15,1), 'sshGclm(2): ', CLIMA(ng)%sshG(10,15,2)
 print *, 'sshclm: ', CLIMA(ng)%ssh(10,15)
+
 # if defined OFFLINE
+
+          ! don't do this step if first time step
+          ! KMT
+!          IF (iic(ng).eq.ntstart(ng)) THEN
+
+!        DO j=Jstr-1,Jend+1
+!          DO i=Istr-1,Iend+1
+!            sshtemp(i,j) = CLIMA(ng)%sshG(i,j,1)
+!          END DO
+!        END DO
+
+ !          END IF
+! KMT added to save future zeta value
+! not set up to work with ANA_SSH currently
+
+! change index to force accessing the future zeta snapshot
+!      Tindex = Iinfo(8,idSSHc,ng)
+!      print *, 'Tindex: ', Tindex
+!      Tindex=3-Tindex
+!      Iinfo(8,idSSHc,ng)=Tindex
+print *, 'time before: ', time(ng), ' dt: ', dt(ng)
+      time(ng)=time(ng)+dt(ng)
+      !tdays(ng)=time(ng)*sec2day
+        CALL set_2dfld_tile (ng, tile, iNLM, idSSHc,                    &
+     &                       LBi, UBi, LBj, UBj,                        &
+     &                       CLIMA(ng)%sshG,                            &
+     &                       sshtemp,                                   &
+     &                       update)
+        IF (FoundError(exit_flag, NoError, __LINE__,                    &
+     &                 __FILE__)) RETURN
+print *, 'time after: ', time(ng), ' dt: ', dt(ng)
+      time(ng)=time(ng)-dt(ng)
+      !tdays(ng)=time(ng)*sec2day
+print *, 'time after2: ', time(ng), ' dt: ', dt(ng)
+
+
+! change index back to carry on
+!      Tindex=3-Tindex
+!      Iinfo(8,idSSHc,ng)=Tindex
+!           ELSE IF (iic(ng).eq.ntstart(ng)) THEN
+
+!        DO j=Jstr-1,Jend+1
+!          DO i=Istr-1,Iend+1
+!            sshtemp(i,j) = CLIMA(ng)%sshG(i,j,1)
+!          END DO
+!        END DO
+
+
+ !          END IF
+
+
         DO j=Jstr-1,Jend+1
           DO i=Istr-1,Iend+1
             OCEAN(ng)%zeta(i,j,1) = CLIMA(ng)%ssh(i,j)
-            OCEAN(ng)%zeta(i,j,2) = CLIMA(ng)%ssh(i,j)
+            OCEAN(ng)%zeta(i,j,2) = sshtemp(i,j) ! CLIMA(ng)%ssh(i,j)
           END DO
         END DO
         IF (EWperiodic(ng).or.NSperiodic(ng)) THEN

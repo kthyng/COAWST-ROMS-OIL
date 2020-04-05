@@ -135,6 +135,7 @@
       integer :: Lend, Lstr, chunk_size
 # endif
       real(r8) :: my_StepTime
+      logical :: FIRSTCALL
 
       !real(r8) :: u
 
@@ -197,6 +198,12 @@
 !# if defined BLAH
         DO ng=1,Ngrids
           IF (iic(ng).eq.ntstart(ng)) THEN
+
+            ! Set this here so that only occurs the first time
+            ! set_avg_zeta is called, the first time step
+            FIRSTCALL = .TRUE.
+
+
 !
 !  Initialize free-surface and compute initial level thicknesses and
 !  depths.
@@ -206,7 +213,7 @@
               ! if want to be able to calculate zeta instead of
               ! inputting.
               !CALL ini_zeta (ng, tile, iNLM)
-              CALL set_avg_zeta(ng, tile)  ! to initialize Zt_avg1
+              CALL set_avg_zeta(ng, tile, FIRSTCALL)  ! to initialize Zt_avg1
               CALL set_depth (ng, tile, iNLM)
             END DO
 !$OMP BARRIER
@@ -407,7 +414,7 @@
 !
         DO ng=1,Ngrids
           DO tile=first_tile(ng),last_tile(ng),+1
-            CALL set_avg_zeta (ng, tile)
+            CALL set_avg_zeta (ng, tile, FIRSTCALL)
             CALL set_depth (ng, tile, iNLM)
           END DO
 !$OMP BARRIER

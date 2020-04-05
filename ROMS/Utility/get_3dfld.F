@@ -139,8 +139,11 @@
       update=.FALSE.
       Tmono=Finfo(7,ifield,ng)
 !
-      IF ((Tmono.lt.time(ng)).or.(iic(ng).eq.0).or.                     &
+      IF ((ABS(Tmono-time(ng)).le.(0.5*dt(ng))).or.(Tmono.lt.time(ng))  &
+     &    .or.(iic(ng).eq.0).or.                                        &
      &    (iic(ng).eq.ntstart(ng))) THEN
+!      IF ((Tmono.lt.time(ng)).or.(iic(ng).eq.0).or.                     &
+!     &    (iic(ng).eq.ntstart(ng))) THEN
 !
 !  Load properties for requested field from information arrays.
 !

@@ -194,7 +194,7 @@
 #ifdef SOLVE3D && OFFLINE
 !
 !***********************************************************************
-      SUBROUTINE set_avg_zeta (ng, tile)
+      SUBROUTINE set_avg_zeta (ng, tile, FIRSTCALL)
 !***********************************************************************
 !
       USE mod_param
@@ -204,6 +204,7 @@
 !  Imported variable declarations.
 !
       integer, intent(in) :: ng, tile
+      logical, intent(inout) :: FIRSTCALL
 !
 !  Local variable declarations.
 !
@@ -215,6 +216,7 @@
       CALL set_avg_zeta_tile (ng, tile,                                     &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    IminS, ImaxS, JminS, JmaxS,                   &
+     &                    FIRSTCALL,                                    &
      &                    COUPLING(ng) % Zt_avg1,                       &
      &                    OCEAN(ng) % zeta)
 # ifdef PROFILE
@@ -228,6 +230,7 @@
       SUBROUTINE set_avg_zeta_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj,                     &
      &                          IminS, ImaxS, JminS, JmaxS,             &
+     &                          FIRSTCALL,                              &
      &                          Zt_avg1,                                &
      &                          zeta)
 !***********************************************************************
@@ -253,6 +256,7 @@
       real(r8), intent(inout) :: Zt_avg1(LBi:UBi,LBj:UBj)
       real(r8), intent(in) :: zeta(LBi:UBi,LBj:UBj,3)
 # endif
+      logical, intent(inout) :: FIRSTCALL
 !
 !  Local variable declarations.
 !
@@ -269,11 +273,22 @@
 !-----------------------------------------------------------------------
 !
 print *, 'zeta1: ', zeta(10,15,1), ' zeta2: ', zeta(10,15,2), ' zeta3: ', zeta(10,15,3)
+IF (FIRSTCALL) THEN
       DO j=JstrR,JendR
         DO i=IstrR,IendR
-          Zt_avg1(i,j)=zeta(i,j,1)  ! or index 2 or 3
+            Zt_avg1(i,j)=zeta(i,j,1)  ! or index 2 or 3
         END DO
       END DO
+  print *, 'Zt_avg1 set_avg_zeta with index 1: ', Zt_avg1(10,15)
+  FIRSTCALL = .FALSE.
+ELSE
+      DO j=JstrR,JendR
+        DO i=IstrR,IendR
+            Zt_avg1(i,j)=zeta(i,j,2)  ! or index 2 or 3
+        END DO
+      END DO
+  print *, 'Zt_avg1 set_avg_zeta with index 2: ', Zt_avg1(10,15)
+END IF
 
       IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
         CALL exchange_r2d_tile (ng, tile,                               &

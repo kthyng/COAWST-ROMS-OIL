@@ -784,6 +784,7 @@ print *, '1 ', t(10,15,25,:,3)
         END DO K_LOOP
       END DO T_LOOP
 print *, '2 ', t(10,15,25,:,3)
+print *, 'CURV: ', CURV(10,15), 'GRAD: ', GRAD(10,15), 'FE: ', FE(10,15), 'FX: ', FX(10,15)
 !
 !-----------------------------------------------------------------------
 !  Time-step vertical advection term.

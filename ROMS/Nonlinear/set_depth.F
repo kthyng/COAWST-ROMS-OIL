@@ -53,7 +53,6 @@
 # ifdef PROFILE
       CALL wclock_on (ng, model, 12, __LINE__, __FILE__)
 # endif
-print *, 'set_depth: Zt_avg1: ',  COUPLING(ng) % Zt_avg1(10,15)
       CALL set_depth_tile (ng, tile, model,                             &
      &                     LBi, UBi, LBj, UBj,                          &
      &                     IminS, ImaxS, JminS, JmaxS,                  &

@@ -40,7 +40,6 @@
 !
 # include "tile.h"
 !
-print *, 'wvel: Zt_avg1: ',  COUPLING(ng) % Zt_avg1(10,15)
       CALL wvelocity_tile (ng, tile,                                    &
      &                     LBi, UBi, LBj, UBj,                          &
      &                     IminS, ImaxS, JminS, JmaxS,                  &

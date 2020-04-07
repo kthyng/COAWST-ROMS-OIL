@@ -272,14 +272,12 @@
 !  case be used to update depths.
 !-----------------------------------------------------------------------
 !
-print *, 'zeta1: ', zeta(10,15,1), ' zeta2: ', zeta(10,15,2), ' zeta3: ', zeta(10,15,3)
 IF (FIRSTCALL) THEN
       DO j=JstrR,JendR
         DO i=IstrR,IendR
             Zt_avg1(i,j)=zeta(i,j,1)  ! or index 2 or 3
         END DO
       END DO
-  print *, 'Zt_avg1 set_avg_zeta with index 1: ', Zt_avg1(10,15)
   FIRSTCALL = .FALSE.
 ELSE
       DO j=JstrR,JendR
@@ -287,7 +285,6 @@ ELSE
             Zt_avg1(i,j)=zeta(i,j,2)  ! or index 2 or 3
         END DO
       END DO
-  print *, 'Zt_avg1 set_avg_zeta with index 2: ', Zt_avg1(10,15)
 END IF
 
       IF (EWperiodic(ng).or.NSperiodic(ng)) THEN

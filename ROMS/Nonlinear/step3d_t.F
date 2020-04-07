@@ -380,7 +380,9 @@
       JLB=BOUNDS(ng)%LBj(-1)
       JUB=BOUNDS(ng)%UBj(-1)
 # endif
-print *, '1 ', t(10,15,25,:,3)
+print *, '1 t: ', t(10,15,1,:,3)
+print *, '1 Huon: ', Huon(10,15,1)
+print *, '1 Hz: ', Hz(10,15,1)
 !
 !-----------------------------------------------------------------------
 !  Time-step horizontal advection term.
@@ -433,7 +435,7 @@ print *, '1 ', t(10,15,25,:,3)
      &                    t(:,:,:,nnew,:))
 #  endif
 # endif
-
+print *, 't, start: ', t(10,15,1,:,3)
 # ifdef OFFLINE_BIOLOGY
       T_LOOP : DO ibt=1,NBT
         itrc=idbio(ibt)
@@ -521,6 +523,9 @@ print *, '1 ', t(10,15,25,:,3)
 #  endif
             END DO
           END DO
+IF ((itrc.eq.3) .and. (k.eq.1)) THEN
+print *, '1a FX: ', FX(10,15)
+END IF
           IF (.not.(CompositeGrid(iwest,ng).or.EWperiodic(ng))) THEN
             IF (DOMAIN(ng)%Western_Edge(tile)) THEN
               DO j=Jstr,Jend
@@ -536,6 +541,9 @@ print *, '1 ', t(10,15,25,:,3)
             END IF
           END IF
 !
+IF ((itrc.eq.3) .and. (k.eq.1)) THEN
+print *, '1ab FX: ', FX(10,15)
+END IF
           DO j=Jstr,Jend
             DO i=Istr-1,Iend+1
 #  if defined TS_U3HADVECTION
@@ -572,6 +580,11 @@ print *, '1 ', t(10,15,25,:,3)
 #  endif
             END DO
           END DO
+IF ((itrc.eq.3) .and. (k.eq.1)) THEN
+print *, '2a FX: ', FX(10,15)
+print *, '2a Huon: ', Huon(10,15,1), ' curv: ', curv(10,15)
+print *, '2a grad: ', grad(10,15)
+END IF
 !
           DO j=Jstrm1,Jendp2
             DO i=Istr,Iend
@@ -707,7 +720,6 @@ print *, '1 ', t(10,15,25,:,3)
               END IF
             END DO
           END IF
-
 # if defined NESTING && !defined ONE_WAY
 !
 !  If refinement grids, extract tracer horizontal advection fluxes
@@ -783,8 +795,11 @@ print *, '1 ', t(10,15,25,:,3)
 # endif
         END DO K_LOOP
       END DO T_LOOP
+IF (itrc.eq.3) THEN
 print *, '2 ', t(10,15,25,:,3)
-print *, 'CURV: ', CURV(10,15), 'GRAD: ', GRAD(10,15), 'FE: ', FE(10,15), 'FX: ', FX(10,15)
+print *, 'CURV: ', CURV(10,15)
+print *, 'GRAD: ', GRAD(10,15), 'FE: ', FE(10,15), 'FX:', FX(10,15)
+END IF
 !
 !-----------------------------------------------------------------------
 !  Time-step vertical advection term.
@@ -1278,7 +1293,9 @@ print *, 'CURV: ', CURV(10,15), 'GRAD: ', GRAD(10,15), 'FE: ', FE(10,15), 'FX: '
 # undef J_RANGE
 # ifdef TS_MPDATA
       END DO
+IF (itrc.eq.3) THEN
 print *, '3 ', t(10,15,25,:,3)
+END IF
 !
 !-----------------------------------------------------------------------
 !  Compute anti-diffusive velocities to corrected advected tracers
@@ -1369,7 +1386,9 @@ print *, '3 ', t(10,15,25,:,3)
             FC(i,0)=0.0_r8
             FC(i,N(ng))=0.0_r8
           END DO
+IF (itrc.eq.3) THEN
 print *, '4 ', t(10,15,25,:,3)
+END IF
 !
 !  Time-step corrected vertical advection (Tunits).
 #  ifdef DIAGNOSTICS_TS
@@ -1395,7 +1414,9 @@ print *, '4 ', t(10,15,25,:,3)
           END DO
         END DO
       END DO
+IF (itrc.eq.3) THEN
 print *, '5 ', t(10,15,25,:,3)
+END IF
 !
 !  Start pipelined J-loop.
 !
@@ -1517,7 +1538,9 @@ print *, '5 ', t(10,15,25,:,3)
               DC(i,k)=cff*(DC(i,k)-FC(i,k-1)*DC(i,k-1))
             END DO
           END DO
+IF (itrc.eq.3) THEN
 print *, '6 ', t(10,15,25,:,3)
+END IF
 !
 !  Compute new solution by back substitution.
 !
@@ -1550,8 +1573,9 @@ print *, '6 ', t(10,15,25,:,3)
 # endif
         END DO
       END DO
+IF (itrc.eq.3) THEN
 print *, '7 ', t(10,15,25,:,3)
-
+END IF
 # if defined AGE_MEAN && defined T_PASSIVE
 !
 !-----------------------------------------------------------------------
@@ -1585,7 +1609,9 @@ print *, '7 ', t(10,15,25,:,3)
         END DO
       END DO
 # endif
+IF (itrc.eq.3) THEN
 print *, '8 ', t(10,15,25,:,3)
+END IF
 # if defined TRC_PSOURCE
 !
 !  Apply tracers point sources to the horizontal advection terms.
@@ -1614,7 +1640,9 @@ print *, '8 ', t(10,15,25,:,3)
           END DO
         END DO
 # endif
+IF (itrc.eq.3) THEN
 print *, '9 ', t(10,15,25,:,3)
+END IF
 !-----------------------------------------------------------------------
 !  Apply lateral boundary conditions and, if appropriate, nudge
 !  to tracer data and apply Land/Sea mask.
@@ -1665,8 +1693,8 @@ print *, '9 ', t(10,15,25,:,3)
             END DO
           END DO
         END IF
-print *, '10 ', t(10,15,25,:,3)
-
+IF (itrc.eq.3) THEN
+END IF
 # ifdef MASKING
 !
 !  Apply Land/Sea mask.
@@ -1728,7 +1756,9 @@ print *, '10 ', t(10,15,25,:,3)
         END DO
       END DO
 # endif
+IF (itrc.eq.3) THEN
 print *, '11 ', t(10,15,25,:,3)
+END IF
 # ifdef DISTRIBUTE
 !
 !  Exchange boundary data.

@@ -138,9 +138,6 @@
       Lregrid=.FALSE.
       Tmono=Finfo(7,ifield,ng)
 !
-print *, Tmono, time(ng), iic(ng), ntstart(ng)
-print *, (Tmono.le.time(ng)), (iic(ng).eq.0), (iic(ng).eq.ntstart(ng))
-print *, ANINT(Tmono - time(ng)).le.0, time(ng) - Tmono
 !      IF (ANINT(Tmono.lt.time(ng)).or.(iic(ng).eq.0).or.                     &
       IF ((ABS(Tmono-time(ng)).le.(0.5*dt(ng))).or.                    &
      &      (Tmono.lt.time(ng)).or.(iic(ng).eq.0)                &

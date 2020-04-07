@@ -1763,7 +1763,6 @@
 !
 !  Free-surface.
 !
-print *, 'Linfo6sshG: ', Linfo(6,idSSHc,ng)
       IF (LsshCLM(ng)) THEN
         CALL get_2dfld (ng, iNLM, idSSHc, ncCLMid(idSSHc,ng),           &
      &                  nCLMfiles(ng), CLM(1,ng), update(1),            &
@@ -1776,8 +1775,6 @@ print *, 'Linfo6sshG: ', Linfo(6,idSSHc,ng)
      &                 __FILE__)) RETURN
       END IF
 #endif
-print *, 'Linfo6sshG: ', Linfo(6,idSSHc,ng)
-print *, 'sshG: ', CLIMA(ng)%sshG(10,15,:)
 #ifndef ANA_M2CLIMA
 !
 !  2D momentum.

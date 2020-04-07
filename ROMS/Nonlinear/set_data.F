@@ -2009,8 +2009,6 @@
         IF (FoundError(exit_flag, NoError, __LINE__,                    &
      &                 __FILE__)) RETURN
 # endif
-print *, 'sshGclm(1): ', CLIMA(ng)%sshG(10,15,1), 'sshGclm(2): ', CLIMA(ng)%sshG(10,15,2)
-print *, 'sshclm: ', CLIMA(ng)%ssh(10,15)
 
 # if defined OFFLINE
 
@@ -2033,7 +2031,6 @@ print *, 'sshclm: ', CLIMA(ng)%ssh(10,15)
 !      print *, 'Tindex: ', Tindex
 !      Tindex=3-Tindex
 !      Iinfo(8,idSSHc,ng)=Tindex
-print *, 'time before: ', time(ng), ' dt: ', dt(ng)
       time(ng)=time(ng)+dt(ng)
       !tdays(ng)=time(ng)*sec2day
         CALL set_2dfld_tile (ng, tile, iNLM, idSSHc,                    &
@@ -2043,10 +2040,8 @@ print *, 'time before: ', time(ng), ' dt: ', dt(ng)
      &                       update)
         IF (FoundError(exit_flag, NoError, __LINE__,                    &
      &                 __FILE__)) RETURN
-print *, 'time after: ', time(ng), ' dt: ', dt(ng)
       time(ng)=time(ng)-dt(ng)
       !tdays(ng)=time(ng)*sec2day
-print *, 'time after2: ', time(ng), ' dt: ', dt(ng)
 
 
 ! change index back to carry on
@@ -2224,7 +2219,9 @@ print *, 'time after2: ', time(ng), ' dt: ', dt(ng)
         END IF
       END DO
 #  endif
-
+print *, 'tclmG: ', CLIMA(ng)%tclmG(10,15,1,:,3)
+print *, 'tclm: ', CLIMA(ng)%tclm (10,15,1,:)
+print *, 'NT: ', NT(ng), ' NAT: ', NAT
 
 #  if defined OFFLINE
       DO itrc=1,NAT
@@ -2262,7 +2259,7 @@ print *, 'time after2: ', time(ng), ' dt: ', dt(ng)
       END DO
 #   endif
 #  endif
-
+print *, 't: ', OCEAN(ng)%t(10,15,1,1,:)
 #  ifdef AICLIMATOLOGY
 #   ifdef ANA_AICLIMA
         CALL ana_aiclima (ng, tile, iNLM)

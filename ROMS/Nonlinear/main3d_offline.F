@@ -423,6 +423,12 @@
         CALL nesting (14)
 # endif
 
+
+! KMT this is where step3d_uv would occur in online case. Need to update
+! Huon here using the newly calculated depths and the next time step's
+! u field?
+
+
 !
 !-----------------------------------------------------------------------
 !  Time-step vertical mixing turbulent equations and passive tracer

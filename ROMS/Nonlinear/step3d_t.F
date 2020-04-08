@@ -59,8 +59,7 @@
 # ifdef PROFILE
       CALL wclock_on (ng, iNLM, 35, __LINE__, __FILE__)
 # endif
-!print *, 'step3d_t start. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
-!     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,1,2)
+print *, '1 u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ', OCEAN(ng)%u(10,15,1,2)
       CALL step3d_t_tile (ng, tile,                                     &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    IminS, ImaxS, JminS, JmaxS,                   &

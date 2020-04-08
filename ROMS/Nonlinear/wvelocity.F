@@ -40,6 +40,8 @@
 !
 # include "tile.h"
 !
+print *, 'wv u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ', OCEAN(ng)%u(10,15,1,2)
+print *, 'DU_avg1: ', COUPLING(ng)%DU_avg1(10,15), ' DU_avg2: ',COUPLING(ng)%DU_avg2(10,15)
       CALL wvelocity_tile (ng, tile,                                    &
      &                     LBi, UBi, LBj, UBj,                          &
      &                     IminS, ImaxS, JminS, JmaxS,                  &
@@ -54,6 +56,7 @@
      &                     OCEAN(ng) % v,                               &
      &                     OCEAN(ng) % W,                               &
      &                     OCEAN(ng) % wvel)
+print *, 'wv u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ',OCEAN(ng)%u(10,15,1,2)
       RETURN
       END SUBROUTINE wvelocity
 !

@@ -111,6 +111,11 @@
 
 # ifdef OFFLINE
       real(r8) :: sshtemp(LBi:UBi,LBj:UBj)
+      real(r8) :: utemp(LBi:UBi,LBj:UBj,N(ng))
+      real(r8) :: vtemp(LBi:UBi,LBj:UBj,N(ng))
+      real(r8) :: omegatemp(LBi:UBi,LBj:UBj,0:N(ng))
+      real(r8) :: Akttemp(LBi:UBi,LBj:UBj,0:N(ng))
+      real(r8) :: Akstemp(LBi:UBi,LBj:UBj,0:N(ng))
       integer :: Tindex
 # endif
 
@@ -2027,12 +2032,7 @@
 ! not set up to work with ANA_SSH currently
 
 ! change index to force accessing the future zeta snapshot
-!      Tindex = Iinfo(8,idSSHc,ng)
-!      print *, 'Tindex: ', Tindex
-!      Tindex=3-Tindex
-!      Iinfo(8,idSSHc,ng)=Tindex
       time(ng)=time(ng)+dt(ng)
-      !tdays(ng)=time(ng)*sec2day
         CALL set_2dfld_tile (ng, tile, iNLM, idSSHc,                    &
      &                       LBi, UBi, LBj, UBj,                        &
      &                       CLIMA(ng)%sshG,                            &
@@ -2041,27 +2041,11 @@
         IF (FoundError(exit_flag, NoError, __LINE__,                    &
      &                 __FILE__)) RETURN
       time(ng)=time(ng)-dt(ng)
-      !tdays(ng)=time(ng)*sec2day
-
-
-! change index back to carry on
-!      Tindex=3-Tindex
-!      Iinfo(8,idSSHc,ng)=Tindex
-!           ELSE IF (iic(ng).eq.ntstart(ng)) THEN
-
-!        DO j=Jstr-1,Jend+1
-!          DO i=Istr-1,Iend+1
-!            sshtemp(i,j) = CLIMA(ng)%sshG(i,j,1)
-!          END DO
-!        END DO
-
-
- !          END IF
-
-
+!
         DO j=Jstr-1,Jend+1
           DO i=Istr-1,Iend+1
             OCEAN(ng)%zeta(i,j,1) = CLIMA(ng)%ssh(i,j)
+!            OCEAN(ng)%zeta(i,j,2) = CLIMA(ng)%ssh(i,j)
             OCEAN(ng)%zeta(i,j,2) = sshtemp(i,j) ! CLIMA(ng)%ssh(i,j)
           END DO
         END DO
@@ -2159,17 +2143,52 @@
      &                 __FILE__)) RETURN
 #  endif
 #  if defined OFFLINE
+
+! KMT added to access subsequent time step value
+      time(ng)=time(ng)+dt(ng)
+      !tdays(ng)=time(ng)*sec2day
+        CALL set_3dfld_tile (ng, tile, iNLM, idUclm,                    &
+     &                       LBi, UBi, LBj, UBj, 1, N(ng),              &
+     &                       CLIMA(ng)%uclmG,                           &
+     &                       utemp,                                     &
+     &                       update)
+        IF (FoundError(exit_flag, NoError, __LINE__,                    &
+     &                 __FILE__)) RETURN
+
+        CALL set_3dfld_tile (ng, tile, iNLM, idVclm,                    &
+     &                       LBi, UBi, LBj, UBj, 1, N(ng),              &
+     &                       CLIMA(ng)%vclmG,                           &
+     &                       vtemp,                                     &
+     &                       update)
+        IF (FoundError(exit_flag, NoError, __LINE__,                    &
+     &                 __FILE__)) RETURN
+      time(ng)=time(ng)-dt(ng)
+
+
         DO k=1,N(ng)
           DO j=Jstr-1,Jend+1
             DO i=Istr-1,Iend+1
               ! KMT change to fix time stepping shift between 3D u 
               ! and ubar
-              OCEAN(ng)%u(i,j,k,1) = CLIMA(ng)%uclm(i,j,k)
-              OCEAN(ng)%u(i,j,k,2) = CLIMA(ng)%uclm(i,j,k)
-              OCEAN(ng)%v(i,j,k,1) = CLIMA(ng)%vclm(i,j,k)
-              OCEAN(ng)%v(i,j,k,2) = CLIMA(ng)%vclm(i,j,k)
+              OCEAN(ng)%u(i,j,k,nrhs(ng)) = CLIMA(ng)%uclm(i,j,k)
+              OCEAN(ng)%u(i,j,k,nnew(ng)) = utemp(i,j,k)
+              OCEAN(ng)%v(i,j,k,nrhs(ng)) = CLIMA(ng)%vclm(i,j,k)
+              OCEAN(ng)%v(i,j,k,nnew(ng)) = vtemp(i,j,k)
+!              OCEAN(ng)%u(i,j,k,nrhs(ng)) = CLIMA(ng)%uclm(i,j,k)
 !              OCEAN(ng)%u(i,j,k,nnew(ng)) = CLIMA(ng)%uclm(i,j,k)
+!!              OCEAN(ng)%u(i,j,k,nnew(ng)) = utemp(i,j,k)
+!              OCEAN(ng)%v(i,j,k,nrhs(ng)) = CLIMA(ng)%vclm(i,j,k)
 !              OCEAN(ng)%v(i,j,k,nnew(ng)) = CLIMA(ng)%vclm(i,j,k)
+!!              OCEAN(ng)%v(i,j,k,nnew(ng)) = vtemp(i,j,k)
+
+!              OCEAN(ng)%u(i,j,k,1) = CLIMA(ng)%uclm(i,j,k)
+!!              OCEAN(ng)%u(i,j,k,2) = CLIMA(ng)%uclm(i,j,k)
+!              OCEAN(ng)%u(i,j,k,2) = utemp(i,j,k)
+!              OCEAN(ng)%v(i,j,k,1) = CLIMA(ng)%vclm(i,j,k)
+!!              OCEAN(ng)%v(i,j,k,2) = CLIMA(ng)%vclm(i,j,k)
+!              OCEAN(ng)%v(i,j,k,2) = vtemp(i,j,k)
+!!              OCEAN(ng)%u(i,j,k,nnew(ng)) = CLIMA(ng)%uclm(i,j,k)
+!!              OCEAN(ng)%v(i,j,k,nnew(ng)) = CLIMA(ng)%vclm(i,j,k)
             END DO
           END DO
         END DO
@@ -2192,7 +2211,7 @@
      &                        OCEAN(ng)%u(:,:,:,i),OCEAN(ng)%v(:,:,:,i))
       END DO
 #   endif
-
+print *, 'u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ', OCEAN(ng)%u(10,15,1,2)
 #  endif
       END IF
 !
@@ -2324,10 +2343,27 @@ print *, 't: ', OCEAN(ng)%t(10,15,1,1,:)
      &                       update)
 #  endif
 #  if defined OFFLINE
+! KMT added to access subsequent time step value
+! Going to store this in extra TKE index.
+      time(ng)=time(ng)+dt(ng)
+      !tdays(ng)=time(ng)*sec2day
+        CALL set_3dfld_tile (ng, tile, iNLM, idOclm,                    &
+     &                       LBi, UBi, LBj, UBj, 0, N(ng),              &
+     &                       CLIMA(ng)%oclmG,                           &
+     &                       omegatemp,                                 &
+     &                       update)
+        IF (FoundError(exit_flag, NoError, __LINE__,                    &
+     &                 __FILE__)) RETURN
+      time(ng)=time(ng)-dt(ng)
+!!!!
+
       DO k=0,N(ng)
         DO j=Jstr-1,Jend+1
           DO i=Istr-1,Iend+1
             OCEAN(ng)%W(i,j,k) = CLIMA(ng)%oclm(i,j,k)/                 &
+     &          ( (GRID(ng)%pm(i,j)) * (GRID(ng)%pn(i,j)) )
+! KMT scale omega here so it is ready for later
+            omegatemp(i,j,k) = omegatemp(i,j,k)/                        &
      &          ( (GRID(ng)%pm(i,j)) * (GRID(ng)%pn(i,j)) )
           ENDDO
         ENDDO
@@ -2397,6 +2433,25 @@ print *, 't: ', OCEAN(ng)%t(10,15,1,1,:)
      &                     CLIMA(ng)%AKtclmG,                           &
      &                     CLIMA(ng)%AKtclm,                            &
      &                     update)
+! KMT added to access subsequent time step value
+! Going to store this in extra GLS index.
+      time(ng)=time(ng)+dt(ng)
+        CALL set_3dfld_tile (ng, tile, iNLM, idAKtclm,                  &
+     &                       LBi, UBi, LBj, UBj, 0, N(ng),              &
+     &                       CLIMA(ng)%AKtclmG,                         &
+     &                       Akttemp,                                   &
+     &                       update)
+        IF (FoundError(exit_flag, NoError, __LINE__,                    &
+     &                 __FILE__)) RETURN
+        CALL set_3dfld_tile (ng, tile, iNLM, idAKsclm,                  &
+     &                       LBi, UBi, LBj, UBj, 0, N(ng),              &
+     &                       CLIMA(ng)%AKsclmG,                         &
+     &                       Akstemp,                                   &
+     &                       update)
+        IF (FoundError(exit_flag, NoError, __LINE__,                    &
+     &                 __FILE__)) RETURN
+      time(ng)=time(ng)-dt(ng)
+!!!!
 #  endif
 #  if defined AKSCLIMATOLOGY || defined AKXCLIMATOLOGY
       CALL set_3dfld_tile (ng, tile, iNLM, idAKsclm,                    &
@@ -2441,15 +2496,23 @@ print *, 't: ', OCEAN(ng)%t(10,15,1,1,:)
 #  if defined AKVCLIMATOLOGY || defined AKXCLIMATOLOGY
             MIXING(ng)%Akv(i,j,k) = CLIMA(ng)%AKvclm(i,j,k)
 #  endif
+! KMT want this to happen regardless of choices, if offline.
+            MIXING(ng)%tke(i,j,k,nnew(ng)) = omegatemp(i,j,k)
 #  if defined TKECLIMATOLOGY || defined MIXCLIMATOLOGY
-            ! KMT: set both time steps to match climatology for offline
-            MIXING(ng)%tke(i,j,k,1) = CLIMA(ng)%tkeclm(i,j,k)
-            MIXING(ng)%tke(i,j,k,2) = CLIMA(ng)%tkeclm(i,j,k)
-!            MIXING(ng)%tke(i,j,k,nnew(ng)) = CLIMA(ng)%tkeclm(i,j,k)
+!            MIXING(ng)%tke(i,j,k,nnew(ng)) = omegatemp
+            MIXING(ng)%tke(i,j,k,nrhs(ng)) = CLIMA(ng)%tkeclm(i,j,k)
+!            ! KMT: set both time steps to match climatology for offline
+!            MIXING(ng)%tke(i,j,k,1) = CLIMA(ng)%tkeclm(i,j,k)
+!            MIXING(ng)%tke(i,j,k,2) = CLIMA(ng)%tkeclm(i,j,k)
+!!            MIXING(ng)%tke(i,j,k,nnew(ng)) = CLIMA(ng)%tkeclm(i,j,k)
 #  endif
+! KMT want this to happen regardless of choices, if offline.
+            MIXING(ng)%gls(i,j,k,nnew(ng)) = Akttemp(i,j,k)
+            MIXING(ng)%gls(i,j,k,3) = Akstemp(i,j,k)
 #  if defined GLSCLIMATOLOGY || defined MIXCLIMATOLOGY
-            MIXING(ng)%gls(i,j,k,1) = CLIMA(ng)%glsclm(i,j,k)
-            MIXING(ng)%gls(i,j,k,2) = CLIMA(ng)%glsclm(i,j,k)
+            MIXING(ng)%gls(i,j,k,nrhs(ng)) = CLIMA(ng)%glsclm(i,j,k)
+!            MIXING(ng)%gls(i,j,k,1) = CLIMA(ng)%glsclm(i,j,k)
+!            MIXING(ng)%gls(i,j,k,2) = CLIMA(ng)%glsclm(i,j,k)
 !            MIXING(ng)%gls(i,j,k,nnew(ng)) = CLIMA(ng)%glsclm(i,j,k)
 #  endif
           ENDDO

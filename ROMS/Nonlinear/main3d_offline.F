@@ -100,7 +100,9 @@
       USE ice_frazil_mod, ONLY : ice_frazil
 # endif
       USE set_depth_mod,        ONLY : set_depth
-      USE set_massflux_mod, ONLY : set_massflux
+!      USE set_massflux_mod, ONLY : set_massflux, set_massflux_nnew
+      USE set_massflux_mod, ONLY : set_massflux, set_massflux_avg
+!      USE set_massflux_mod
 # if defined SSH_TIDES || defined UV_TIDES || defined POT_TIDES
       USE set_tides_mod, ONLY : set_tides
 # endif
@@ -227,10 +229,6 @@
           END IF
         END DO
 !# endif  ! blah
-! try to look at u variables, KMT
-     !u = OCEAN(ng)%u(10,15,1,1)
-     !print *, u
-     !print *, OCEAN(ng)%u(10,15,1,1) !
 !-----------------------------------------------------------------------
 !  Compute horizontal mass fluxes (Hz*u/n and Hz*v/m), density related
 !  quatities and report global diagnostics.
@@ -414,6 +412,7 @@
 !
         DO ng=1,Ngrids
           DO tile=first_tile(ng),last_tile(ng),+1
+! IS SOME OF THIS FUNCTIONALITY NOW INSIDE set_massflux_offline?
             CALL set_avg_zeta (ng, tile, FIRSTCALL)
             CALL set_depth (ng, tile, iNLM)
           END DO
@@ -427,7 +426,18 @@
 ! KMT this is where step3d_uv would occur in online case. Need to update
 ! Huon here using the newly calculated depths and the next time step's
 ! u field?
+        DO ng=1,Ngrids
+          DO tile=first_tile(ng),last_tile(ng),+1
+            CALL set_massflux_avg (ng, tile, iNLM)
+          END DO
+        END DO
 
+!        DO ng=1,Ngrids
+!          DO tile=last_tile(ng),first_tile(ng),-1
+!            CALL set_massflux_offline (ng, tile)
+!          END DO
+!!$OMP BARRIER
+!        END DO
 
 !
 !-----------------------------------------------------------------------

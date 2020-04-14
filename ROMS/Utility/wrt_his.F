@@ -388,6 +388,7 @@
 !
 !  Write out free-surface (m)
 !
+print *, 'zeta write: ', OCEAN(ng) % zeta(10,15,KOUT)
       IF (Hout(idFsur,ng)) THEN
         scale=1.0_r8
         gtype=gfactor*r2dvar
@@ -459,6 +460,7 @@
 !
 !  Write out 2D U-momentum component (m/s).
 !
+print *, 'ubar write: ', OCEAN(ng) % ubar(10,15,KOUT)
       IF (Hout(idUbar,ng)) THEN
         scale=1.0_r8
         gtype=gfactor*u2dvar

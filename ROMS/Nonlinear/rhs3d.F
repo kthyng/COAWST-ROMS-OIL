@@ -195,6 +195,10 @@
 # endif
      &                 OCEAN(ng) % ru,                                  &
      &                 OCEAN(ng) % rv)
+print *, 'end rhs3d Huon: ', GRID(ng)%Huon(10,15,1)
+print *, 'end rhs3d Hz: ', GRID(ng)%Hz(10,15,1)
+print *, 'end rhs3d ubar: ', OCEAN(ng)%ubar(10,15,:2)
+print *, 'end rhs3d zeta: ', OCEAN(ng)%zeta(10,15,:2)
 # ifdef PROFILE
       CALL wclock_off (ng, iNLM, 21, __LINE__, __FILE__)
 # endif

@@ -326,7 +326,7 @@
 
 # include "set_bounds.h"
 
-# ifdef SOLVE3D
+# if defined SOLVE3D && !defined OFFLINE
 !
 !-----------------------------------------------------------------------
 !  If not perfect restart, initialize other time levels for 3D momentum.
@@ -364,7 +364,7 @@
             END DO
           END IF
         END DO
-# if !defined OFFLINE
+!# if !defined OFFLINE
 !
 !  Apply boundary conditions.
 !
@@ -389,7 +389,7 @@
      &                   IminS, ImaxS, JminS, JmaxS,                    &
      &                   nstp, nnew,                                    &
      &                   v)
-# endif
+!# endif
       END IF
 !
 # if !defined OFFLINE

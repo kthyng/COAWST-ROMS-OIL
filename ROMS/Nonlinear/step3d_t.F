@@ -59,7 +59,13 @@
 # ifdef PROFILE
       CALL wclock_on (ng, iNLM, 35, __LINE__, __FILE__)
 # endif
-print *, '1 u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ', OCEAN(ng)%u(10,15,1,2)
+!print *, '1 u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ', OCEAN(ng)%u(10,15,1,2)
+print *, 'start step3d_t Huon: ', GRID(ng)%Huon(63:64,99,1)
+print *, 'start step3d_t Hz: ', GRID(ng)%Hz(63,99,1)
+print *, 'start step3d_t z_r: ', GRID(ng)%z_r(63,99,1)
+print *, 'start step3d_t Akt: ', MIXING(ng)%Akt(63,99,1,:)
+print *, 'start step3d_t W: ', OCEAN(ng)%W(63,99,1)
+print *, 'start step3d_t t: ', OCEAN(ng)%t(63,99,1,:,3)
       CALL step3d_t_tile (ng, tile,                                     &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    IminS, ImaxS, JminS, JmaxS,                   &
@@ -113,8 +119,7 @@ print *, '1 u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ', OCEAN(ng)%u(10,15,1,2)
      &                    DIAGS(ng) % DiaTwrk,                          &
 # endif
      &                    OCEAN(ng) % t)
-!print *, 'step3d_t end. u: ', OCEAN(ng)%u(10,15,1,1), ', ubar: ', &
-!     & OCEAN(ng)%ubar(10,15,1), ', salt: ', OCEAN(ng)%t(10,15,1,1,2)
+print *, 'end step3d_t t: ', OCEAN(ng)%t(63,99,1,:,3)
 # ifdef PROFILE
       CALL wclock_off (ng, iNLM, 35, __LINE__, __FILE__)
 # endif
@@ -379,9 +384,9 @@ print *, '1 u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ', OCEAN(ng)%u(10,15,1,2)
       JLB=BOUNDS(ng)%LBj(-1)
       JUB=BOUNDS(ng)%UBj(-1)
 # endif
-print *, '1 t: ', t(10,15,1,:,3)
-print *, '1 Huon: ', Huon(10,15,1)
-print *, '1 Hz: ', Hz(10,15,1)
+!print *, '1 t: ', t(10,15,1,:,3)
+!print *, '1 Huon: ', Huon(10,15,1)
+!print *, '1 Hz: ', Hz(10,15,1)
 !
 !-----------------------------------------------------------------------
 !  Time-step horizontal advection term.
@@ -434,7 +439,7 @@ print *, '1 Hz: ', Hz(10,15,1)
      &                    t(:,:,:,nnew,:))
 #  endif
 # endif
-print *, 't, start: ', t(10,15,1,:,3)
+!print *, 't, start: ', t(10,15,1,:,3)
 # ifdef OFFLINE_BIOLOGY
       T_LOOP : DO ibt=1,NBT
         itrc=idbio(ibt)
@@ -523,7 +528,7 @@ print *, 't, start: ', t(10,15,1,:,3)
             END DO
           END DO
 IF ((itrc.eq.3) .and. (k.eq.1)) THEN
-print *, '1a FX: ', FX(10,15)
+!print *, '1a FX: ', FX(10,15)
 END IF
           IF (.not.(CompositeGrid(iwest,ng).or.EWperiodic(ng))) THEN
             IF (DOMAIN(ng)%Western_Edge(tile)) THEN
@@ -541,7 +546,7 @@ END IF
           END IF
 !
 IF ((itrc.eq.3) .and. (k.eq.1)) THEN
-print *, '1ab FX: ', FX(10,15)
+!print *, '1ab FX: ', FX(10,15)
 END IF
           DO j=Jstr,Jend
             DO i=Istr-1,Iend+1
@@ -580,9 +585,9 @@ END IF
             END DO
           END DO
 IF ((itrc.eq.3) .and. (k.eq.1)) THEN
-print *, '2a FX: ', FX(10,15)
-print *, '2a Huon: ', Huon(10,15,1), ' curv: ', curv(10,15)
-print *, '2a grad: ', grad(10,15)
+!print *, '2a FX: ', FX(10,15)
+!print *, '2a Huon: ', Huon(10,15,1), ' curv: ', curv(10,15)
+!print *, '2a grad: ', grad(10,15)
 END IF
 !
           DO j=Jstrm1,Jendp2
@@ -795,9 +800,9 @@ END IF
         END DO K_LOOP
       END DO T_LOOP
 IF (itrc.eq.3) THEN
-print *, '2 ', t(10,15,25,:,3)
-print *, 'CURV: ', CURV(10,15)
-print *, 'GRAD: ', GRAD(10,15), 'FE: ', FE(10,15), 'FX:', FX(10,15)
+!print *, '2 ', t(10,15,25,:,3)
+!print *, 'CURV: ', CURV(10,15)
+!print *, 'GRAD: ', GRAD(10,15), 'FE: ', FE(10,15), 'FX:', FX(10,15)
 END IF
 !
 !-----------------------------------------------------------------------
@@ -1293,7 +1298,7 @@ END IF
 # ifdef TS_MPDATA
       END DO
 IF (itrc.eq.3) THEN
-print *, '3 ', t(10,15,25,:,3)
+!print *, '3 ', t(10,15,25,:,3)
 END IF
 !
 !-----------------------------------------------------------------------
@@ -1386,7 +1391,7 @@ END IF
             FC(i,N(ng))=0.0_r8
           END DO
 IF (itrc.eq.3) THEN
-print *, '4 ', t(10,15,25,:,3)
+!print *, '4 ', t(10,15,25,:,3)
 END IF
 !
 !  Time-step corrected vertical advection (Tunits).
@@ -1414,7 +1419,7 @@ END IF
         END DO
       END DO
 IF (itrc.eq.3) THEN
-print *, '5 ', t(10,15,25,:,3)
+!print *, '5 ', t(10,15,25,:,3)
 END IF
 !
 !  Start pipelined J-loop.
@@ -1538,7 +1543,7 @@ END IF
             END DO
           END DO
 IF (itrc.eq.3) THEN
-print *, '6 ', t(10,15,25,:,3)
+!print *, '6 ', t(10,15,25,:,3)
 END IF
 !
 !  Compute new solution by back substitution.
@@ -1573,7 +1578,7 @@ END IF
         END DO
       END DO
 IF (itrc.eq.3) THEN
-print *, '7 ', t(10,15,25,:,3)
+!print *, '7 ', t(10,15,25,:,3)
 END IF
 # if defined AGE_MEAN && defined T_PASSIVE
 !
@@ -1609,7 +1614,7 @@ END IF
       END DO
 # endif
 IF (itrc.eq.3) THEN
-print *, '8 ', t(10,15,25,:,3)
+!print *, '8 ', t(10,15,25,:,3)
 END IF
 # if defined TRC_PSOURCE
 !
@@ -1640,7 +1645,7 @@ END IF
         END DO
 # endif
 IF (itrc.eq.3) THEN
-print *, '9 ', t(10,15,25,:,3)
+!print *, '9 ', t(10,15,25,:,3)
 END IF
 !-----------------------------------------------------------------------
 !  Apply lateral boundary conditions and, if appropriate, nudge
@@ -1756,7 +1761,7 @@ END IF
       END DO
 # endif
 IF (itrc.eq.3) THEN
-print *, '11 ', t(10,15,25,:,3)
+!print *, '11 ', t(10,15,25,:,3)
 END IF
 # ifdef DISTRIBUTE
 !

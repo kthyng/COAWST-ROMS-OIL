@@ -48,6 +48,10 @@
 # ifdef PROFILE
       CALL wclock_on (ng, iNLM, 34, __LINE__, __FILE__)
 # endif
+print *, 'start step3d_uv Huon: ', GRID(ng)%Huon(10,15,1)
+print *, 'start step3d_uv Hz: ', GRID(ng)%Hz(10,15,1)
+print *, 'start step3d_uv ubar: ', OCEAN(ng)%ubar(10,15,:2)
+print *, 'start step3d_uv zeta: ', OCEAN(ng)%zeta(10,15,:2)
       CALL step3d_uv_tile (ng, tile,                                    &
      &                     LBi, UBi, LBj, UBj,                          &
      &                     IminS, ImaxS, JminS, JmaxS,                  &
@@ -99,6 +103,10 @@
 # endif
      &                     GRID(ng) % Huon,                             &
      &                     GRID(ng) % Hvom)
+print *, 'end step3d_uv Huon: ', GRID(ng)%Huon(10,15,1)
+print *, 'end step3d_uv Hz: : ', GRID(ng)%Hz(10,15,1)
+print *, 'end step3d_uv ubar: ', OCEAN(ng)%ubar(10,15,:2)
+print *, 'end step3d_uv zeta: ', OCEAN(ng)%zeta(10,15,:2)
 # ifdef PROFILE
       CALL wclock_off (ng, iNLM, 34, __LINE__, __FILE__)
 # endif

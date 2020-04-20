@@ -19,7 +19,7 @@
       PRIVATE
       PUBLIC  :: set_massflux
 # ifdef OFFLINE
-      PUBLIC  :: set_massflux_avg, set_massflux_offline
+      PUBLIC  :: set_massflux_avg
 # endif
 # ifdef ADJOINT
       PUBLIC  :: reset_massflux
@@ -35,8 +35,6 @@
       USE mod_grid
       USE mod_ocean
       USE mod_stepping
-! KMT
-      USE mod_coupling
 !
 !  Imported variable declarations.
 !
@@ -49,8 +47,6 @@
 # ifdef PROFILE
       CALL wclock_on (ng, model, 12, __LINE__, __FILE__)
 # endif
-print *, 'nrhs: ', nrhs(ng), ' nnew: ', nnew(ng)
-print *, 'massflux u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ',OCEAN(ng)%u(10,15,1,2)
       CALL set_massflux_tile (ng, tile, model,                          &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        IminS, ImaxS, JminS, JmaxS,               &
@@ -69,8 +65,6 @@ print *, 'massflux u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ',OCEAN(ng)%u(10,15,
 # ifdef PROFILE
       CALL wclock_off (ng, model, 12, __LINE__, __FILE__)
 # endif
-print *, 'massflux u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ',OCEAN(ng)%u(10,15,1,2)
-print *, 'set_massflux: Huon: ', GRID(ng)%Huon(63:64,99,1)
 
       RETURN
       END SUBROUTINE set_massflux
@@ -80,46 +74,31 @@ print *, 'set_massflux: Huon: ', GRID(ng)%Huon(63:64,99,1)
 !***********************************************************************
       SUBROUTINE set_massflux_avg (ng, tile, model)
 !***********************************************************************
-! Same as set_massflux but for subsequent time step for u/v
+!
+!-----------------------------------------------------------------------
+!-----------------------------------------------------------------------
+!  KMT Calculate mid-time step values for Huon, Hvom, and Akt (both indices)
+!-----------------------------------------------------------------------
+!-----------------------------------------------------------------------
+!
 !
       USE mod_param
       USE mod_grid
       USE mod_ocean
       USE mod_stepping
-# if defined AKTCLIMATOLOGY || defined AKXCLIMATOLOGY || defined OCLIMATOLOGY
+# if defined AKTCLIMATOLOGY || defined AKSCLIMATOLOGY || defined AKXCLIMATOLOGY
       USE mod_mixing
 # endif
 !
 !  Imported variable declarations.
 !
       integer, intent(in) :: ng, tile, model
-!      integer, intent(in) :: LBi, UBi, LBj, UBj
-!
-!  Local variable declarations.
-!
-!      integer :: LBi, UBi, LBj, UBj
-!      integer :: IminS, ImaxS, JminS, JmaxS
-!#  ifdef ASSUMED_SHAPE
-! Huonnew holds Huon for next time step
-!      real(r8) :: Huonnew(LBi:,LBj:,:)
-!      real(r8) :: Hvomnew(LBi:,LBj:,:)
-!#  else
-! Huonnew holds Huon for next time step
-!      real(r8) :: Huonnew(LBi:UBi,LBj:UBj,N(ng))
-!      real(r8) :: Hvomnew(LBi:UBi,LBj:UBj,N(ng))
-!#  endif
 
 # include "tile.h"
 !
 # ifdef PROFILE
       CALL wclock_on (ng, model, 12, __LINE__, __FILE__)
 # endif
-print *, 'nrhs: ', nrhs(ng), ' nnew: ', nnew(ng)
-print *, 'u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ', OCEAN(ng)%u(10,15,1,2)
-! Calculate average from previous and next time step values of Huon/Hvom
-! Previous time step held in GRID(ng)%Huon, next time step held in 
-! Huonnew. Newly calculated average will be put in GRID(ng)%Huon to be
-! used in other functions.
       CALL set_massflux_avg_tile (ng, tile, model,                      &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        IminS, ImaxS, JminS, JmaxS,               &
@@ -133,10 +112,7 @@ print *, 'u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ', OCEAN(ng)%u(10,15,1,2)
      &                        GRID(ng) % Hz,                            &
      &                        GRID(ng) % om_v,                          &
      &                        GRID(ng) % on_u,                          &
-# ifdef OCLIMATOLOGY
-     &                        OCEAN(ng) % W, MIXING(ng) % tke,          &
-# endif
-# if defined AKTCLIMATOLOGY || defined AKXCLIMATOLOGY
+# if defined AKTCLIMATOLOGY || defined AKSCLIMATOLOGY || defined AKXCLIMATOLOGY
      &                        MIXING(ng) % Akt, MIXING(ng) % gls,       & 
 # endif
      &                        GRID(ng) % Huon,                          &
@@ -151,8 +127,6 @@ print *, 'u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ', OCEAN(ng)%u(10,15,1,2)
 
 !
 !***********************************************************************
-! KMT calculate average of two time step values of Huon/Hvom
-! also set omega and Akt values to next time step, stored in tke and gls
       SUBROUTINE set_massflux_avg_tile (ng, tile, model,                &
      &                              LBi, UBi, LBj, UBj,                 &
      &                              IminS, ImaxS, JminS, JmaxS,         &
@@ -162,10 +136,7 @@ print *, 'u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ', OCEAN(ng)%u(10,15,1,2)
      &                              u_stokes, v_stokes,                 &
 # endif
      &                              Hz,om_v, on_u,                      &
-# ifdef OCLIMATOLOGY
-     &                              W, tke,                             &
-# endif
-# if defined AKTCLIMATOLOGY || defined AKXCLIMATOLOGY
+# if defined AKTCLIMATOLOGY || defined AKSCLIMATOLOGY || defined AKXCLIMATOLOGY
      &                              Akt, gls,                           &
 # endif
      &                              Huon, Hvom)
@@ -199,13 +170,7 @@ print *, 'u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ', OCEAN(ng)%u(10,15,1,2)
 
       real(r8), intent(inout) :: Huon(LBi:,LBj:,:)
       real(r8), intent(inout) :: Hvom(LBi:,LBj:,:)
-     ! real(r8) :: Huonnew(LBi:,LBj:,:)
-      !real(r8) :: Hvomnew(LBi:,LBj:,:)
-#  ifdef OCLIMATOLOGY
-      real(r8), intent(inout) :: W(LBi:,LBj:,0:)
-      real(r8), intent(inout) :: tke(LBi:,LBj:,0:,:)
-#  endif
-#  if defined AKTCLIMATOLOGY || defined AKXCLIMATOLOGY
+#  if defined AKTCLIMATOLOGY || defined AKSCLIMATOLOGY || defined AKXCLIMATOLOGY
       real(r8), intent(out) :: Akt(LBi:,LBj:,0:,:)
       real(r8), intent(inout) :: gls(LBi:,LBj:,0:,:)
 #  endif
@@ -222,13 +187,7 @@ print *, 'u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ', OCEAN(ng)%u(10,15,1,2)
 
       real(r8), intent(inout) :: Huon(LBi:UBi,LBj:UBj,N(ng))
       real(r8), intent(inout) :: Hvom(LBi:UBi,LBj:UBj,N(ng))
-      !real(r8) :: Huonnew(LBi:UBi,LBj:UBj,N(ng))
-      !real(r8) :: Hvomnew(LBi:UBi,LBj:UBj,N(ng))
-#  ifdef OCLIMATOLOGY
-      real(r8), intent(inout) :: W(LBi:UBi,LBj:UBj,0:N(ng))
-      real(r8), intent(inout) :: tke(LBi:UBi,LBj:UBj,0:N(ng),3)
-#  endif
-#  if defined AKTCLIMATOLOGY || defined AKXCLIMATOLOGY
+#  if defined AKTCLIMATOLOGY || defined AKSCLIMATOLOGY || defined AKXCLIMATOLOGY
       real(r8), intent(out) :: Akt(LBi:UBi,LBj:UBj,0:N(ng),NAT)
       real(r8), intent(inout) :: gls(LBi:UBi,LBj:UBj,0:N(ng),3)
 #  endif
@@ -242,7 +201,10 @@ print *, 'u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ', OCEAN(ng)%u(10,15,1,2)
 
 # include "set_bounds.h"
 
-! get new time step of mass flux value
+!-----------------------------------------------------------------------
+!  KMT Calculate new time step of mass flux value using u, v corresponding to
+!  the updated values for next time step nnew.
+!-----------------------------------------------------------------------
       CALL set_massflux_tile (ng, tile, model,                          &
      &                        LBi, UBi, LBj, UBj,                       &
      &                        IminS, ImaxS, JminS, JmaxS,               &
@@ -260,49 +222,48 @@ print *, 'u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ', OCEAN(ng)%u(10,15,1,2)
 !  Compute average of  horizontal mass fluxes, Hz*u/n and Hz*v/m.
 !  from previous and subsequent time steps. This is only for offline 
 !  case.
+!  Calculate average from previous and next time step values of Huon/Hvom
+!  Previous time step held in GRID(ng)%Huon, next time step held in 
+!  Huonnew. Newly calculated average will be put in GRID(ng)%Huon to be
+!  used in other functions.
 !-----------------------------------------------------------------------
 !
 !  Compute horizontal mass fluxes.
 !
       DO k=1,N(ng)
-        DO j=JstrT,JendT
-          DO i=IstrP,IendT
+        DO j=JstrT-1,JendT+1
+          DO i=IstrP-1,IendT+1
             Huon(i,j,k)=0.5_r8*(Huon(i,j,k)+Huonnew(i,j,k))
           END DO
         END DO
-        DO j=JstrP,JendT
-          DO i=IstrT,IendT
+        DO j=JstrP-1,JendT+1
+          DO i=IstrT-1,IendT+1
             Hvom(i,j,k)=0.5_r8*(Hvom(i,j,k)+Hvomnew(i,j,k))
           END DO
         END DO
       END DO
 
-# ifdef OCLIMATOLOGY
-! Update omega to avg with  next time step, which is stored in TKE index nnew
-! Indices are extended 1 in each horizontal direction to cover 
-! boundaries since for offline case they are set to closed.
+!-----------------------------------------------------------------------
+!  Update Akt (both indices) to next time step, which is stored in GLS 
+!-----------------------------------------------------------------------
       DO k=0,N(ng)
         DO j=Jstr-1,Jend+1
           DO i=Istr-1,Iend+1
-            W(i,j,k)=0.5_r8*(W(i,j,k) + tke(i,j,k,nnew))
-          END DO
-        END DO
-      END DO
-# endif
-
 # if defined AKTCLIMATOLOGY || defined AKXCLIMATOLOGY
-! Update Akt to next time step, which is stored in GLS index nnew
-! Only deal with index 1 of Akt array since that corresponds to 
-! Akt instead of Aks. 
-      DO k=0,N(ng)
-        DO j=Jstr-1,Jend+1
-          DO i=Istr-1,Iend+1
-            Akt(i,j,k,1)=gls(i,j,k,nnew)
+!  Update Akt to next time step, which is stored in GLS index nnew
+!  Only deal with index 1 of Akt array since that corresponds to 
+!  Akt instead of Aks.
+!  Akt matters because it can be used with floats in VWALK 
+             Akt(i,j,k,1)=gls(i,j,k,nnew)
+# endif
+# if defined AKSCLIMATOLOGY || defined AKXCLIMATOLOGY
+!  Update Aks to next time step, which is stored in GLS index 3
+!  This is used in tracer advection in step3d_t
             Akt(i,j,k,2)=gls(i,j,k,3)
+# endif
           END DO
         END DO
       END DO
-# endif
 
 !
 !  Exchange boundary information.
@@ -314,13 +275,17 @@ print *, 'u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ', OCEAN(ng)%u(10,15,1,2)
         CALL exchange_v3d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj, 1, N(ng),           &
      &                          Hvom)
-! KMT don't have boundary exchange here for omega since it would need to
-! be scaled first. But, I don't think these parts are used since the 
+! KMT I don't think these parts are used since the 
 ! boundary conditions are closed for offline simulations.
 # if defined AKTCLIMATOLOGY || defined AKXCLIMATOLOGY
         CALL exchange_w3d_tile (ng, tile,                               &
      &                          LBi, UBi, LBj, UBj, 0, N(ng),           &
      &                          Akt(:,:,:,1))
+# endif
+# if defined AKSCLIMATOLOGY || defined AKXCLIMATOLOGY
+        CALL exchange_w3d_tile (ng, tile,                               &
+     &                          LBi, UBi, LBj, UBj, 0, N(ng),           &
+     &                          Akt(:,:,:,2))
 # endif
       END IF
 
@@ -330,14 +295,7 @@ print *, 'u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ', OCEAN(ng)%u(10,15,1,2)
      &                    NghostPoints,                                 &
      &                    EWperiodic(ng), NSperiodic(ng),               &
      &                    Huon, Hvom)
-#  ifdef OCLIMATOLOGY
-      CALL mp_exchange3d (ng, tile, model, 1,                           &
-     &                    LBi, UBi, LBj, UBj, 0, N(ng),                 &
-     &                    NghostPoints,                                 &
-     &                    EWperiodic(ng), NSperiodic(ng),               &
-     &                    W)
-#  endif
-#  if defined AKTCLIMATOLOGY || defined AKXCLIMATOLOGY
+#  if defined AKTCLIMATOLOGY || defined AKSCLIMATOLOGY || defined AKXCLIMATOLOGY
       CALL mp_exchange4d (ng, tile, iNLM, 1,                            &
      &                    LBi, UBi, LBj, UBj, 0, N(ng), 1, NAT,         &
      &                    NghostPoints,                                 &

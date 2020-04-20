@@ -100,9 +100,7 @@
       USE ice_frazil_mod, ONLY : ice_frazil
 # endif
       USE set_depth_mod,        ONLY : set_depth
-!      USE set_massflux_mod, ONLY : set_massflux, set_massflux_nnew
       USE set_massflux_mod, ONLY : set_massflux, set_massflux_avg
-!      USE set_massflux_mod
 # if defined SSH_TIDES || defined UV_TIDES || defined POT_TIDES
       USE set_tides_mod, ONLY : set_tides
 # endif
@@ -139,8 +137,6 @@
       real(r8) :: my_StepTime
       logical :: FIRSTCALL
 
-      !real(r8) :: u
-
 !
 !=======================================================================
 !  Time-step nonlinear 3D primitive equations by the specified time.
@@ -171,19 +167,16 @@
 !  Read in required data, if any, from input NetCDF files.
 !-----------------------------------------------------------------------
 !
-!# if defined BLAH
         DO ng=1,Ngrids
           CALL get_data (ng)
           IF (exit_flag.ne.NoError) RETURN
         END DO
-!# endif  !blah
 !
 !-----------------------------------------------------------------------
 !  If applicable, process input data: time interpolate between data
 !  snapshots.
 !-----------------------------------------------------------------------
 !
-!# if defined BLAH
         DO ng=1,Ngrids
           DO tile=first_tile(ng),last_tile(ng),+1
             CALL set_data (ng, tile)
@@ -191,13 +184,11 @@
 !$OMP BARRIER
         END DO
         IF (exit_flag.ne.NoError) RETURN
-!# endif  ! blah
 !
 !-----------------------------------------------------------------------
 !  Initialize all time levels and compute other initial fields.
 !-----------------------------------------------------------------------
 !
-!# if defined BLAH
         DO ng=1,Ngrids
           IF (iic(ng).eq.ntstart(ng)) THEN
 
@@ -228,13 +219,11 @@
 !$OMP BARRIER
           END IF
         END DO
-!# endif  ! blah
 !-----------------------------------------------------------------------
 !  Compute horizontal mass fluxes (Hz*u/n and Hz*v/m), density related
 !  quatities and report global diagnostics.
 !-----------------------------------------------------------------------
 !
-!# if defined BLAH
         DO ng=1,Ngrids
           DO tile=first_tile(ng),last_tile(ng),+1
             CALL set_massflux (ng, tile, iNLM)
@@ -357,7 +346,6 @@
 # ifdef NESTING
         CALL nesting (11)
 # endif
-!# endif !blah
 !
 !-----------------------------------------------------------------------
 !  If appropriate, write out fields into output NetCDF files.  Notice
@@ -371,7 +359,6 @@
      &        ((iic(ng).eq.(ntend(ng)+1)).and.(ng.eq.Ngrids))) RETURN 
         END DO
 
-!# if defined BLAH
 !
 !-----------------------------------------------------------------------
 !  Compute right-hand-side terms for 3D equations.
@@ -380,19 +367,12 @@
 # if defined OFFLINE_TPASSIVE || defined OFFLINE_BIOLOGY
         DO ng=1,Ngrids
           DO tile=first_tile(ng),last_tile(ng),+1
-!# if defined BLAH
             CALL rhs3d (ng, tile)
-!# endif  ! blah
 #  if !defined OFFLINE && ( !defined MIXCLIMATOLOGY || !defined AKXCLIMATOLOGY )
 #   ifdef MY25_MIXING
             CALL my25_prestep (ng, tile)
 #   elif defined GLS_MIXING
             CALL gls_prestep (ng, tile)
-!# ifdef MY25_MIXING
-!            CALL my25_prestep (ng, tile)
-!#  elif defined GLS_MIXING
-!            CALL gls_prestep (ng, tile)
-!# endif
 #   endif
 #  endif
           END DO
@@ -407,12 +387,14 @@
 !-----------------------------------------------------------------------
 !  Recompute depths and thicknesses using the new time filtered
 !  free-surface.
-!  check this
+!  KMT In this offline case, the fast time steps are not run. Instead,
+!  zeta is updated here with the average of this and the subsequent time
+!  step values. Then, depths are updated to use this new zeta value
+!  (stored in Zt_avg1). 
 !-----------------------------------------------------------------------
 !
         DO ng=1,Ngrids
           DO tile=first_tile(ng),last_tile(ng),+1
-! IS SOME OF THIS FUNCTIONALITY NOW INSIDE set_massflux_offline?
             CALL set_avg_zeta (ng, tile, FIRSTCALL)
             CALL set_depth (ng, tile, iNLM)
           END DO
@@ -426,18 +408,17 @@
 ! KMT this is where step3d_uv would occur in online case. Need to update
 ! Huon here using the newly calculated depths and the next time step's
 ! u field?
+!-----------------------------------------------------------------------
+!  KMT This calculates values for Huon, Hvom, Akt (indices 1 and 2)
+!  using updated averaged Zt_avg1 (zeta) value so that offline tracer is
+!  calculated correctly. 
+!-----------------------------------------------------------------------
+
         DO ng=1,Ngrids
           DO tile=first_tile(ng),last_tile(ng),+1
             CALL set_massflux_avg (ng, tile, iNLM)
           END DO
         END DO
-
-!        DO ng=1,Ngrids
-!          DO tile=last_tile(ng),first_tile(ng),-1
-!            CALL set_massflux_offline (ng, tile)
-!          END DO
-!!$OMP BARRIER
-!        END DO
 
 !
 !-----------------------------------------------------------------------
@@ -447,20 +428,15 @@
 !
         DO ng=1,Ngrids
           DO tile=first_tile(ng),last_tile(ng),+1
-# if !defined OCLIMATOLOGY
+            ! KMT run this even if OCLIMATOLOGY is on because omega
+            ! needs to be updated mid-time loop for tracer advection.
             CALL omega (ng, tile, iNLM)
-# endif
 # if !defined OFFLINE && ( !defined MIXCLIMATOLOGY || !defined AKXCLIMATOLOGY )
 #  ifdef MY25_MIXING
             CALL my25_corstep (ng, tile)
 #  elif defined GLS_MIXING
             CALL gls_corstep (ng, tile)
 #  endif
-!# ifdef MY25_MIXING
-!            CALL my25_corstep (ng, tile)
-!# elif defined GLS_MIXING
-!            CALL gls_corstep (ng, tile)
-!# endif
 # endif
 
 # ifdef BIOLOGY
@@ -476,8 +452,6 @@
         CALL nesting (17)
 # endif
 # endif
-
-!# endif  ! blah
 
 # ifndef TS_FIXED
 !
@@ -501,8 +475,6 @@
 # endif
 # endif
 # endif
-
-!# if defined BLAH
 
 # ifdef OFFLINE_FLOATS
 !
@@ -535,7 +507,6 @@
           nfm3(ng)=MOD(nfm3(ng)+1,NFT+1)
         END DO
 # endif
-!# endif ! blah
       END DO STEP_LOOP
 
       RETURN

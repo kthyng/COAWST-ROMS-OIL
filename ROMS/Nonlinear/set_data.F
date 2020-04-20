@@ -2192,6 +2192,7 @@
 !
 !-----------------------------------------------------------------------
 !  Set tracers climatology.
+!  KMT don't need temp/salt for offline case
 !-----------------------------------------------------------------------
 !
 #  ifdef ANA_TCLIMA
@@ -2214,40 +2215,6 @@
       END DO
 #  endif
 
-#  if defined OFFLINE
-      DO itrc=1,NAT
-        DO k=1,N(ng)
-          DO j=Jstr-1,Jend+1
-            DO i=Istr-1,Iend+1
-              ! KMT changed so that both time steps set at once for 3D 
-              ! fields instead of alternating, fixing a shift in the output
-              OCEAN(ng)%t(i,j,k,1,itrc) = CLIMA(ng)%tclm(i,j,k,itrc)
-              OCEAN(ng)%t(i,j,k,2,itrc) = CLIMA(ng)%tclm(i,j,k,itrc)
-            ENDDO
-          ENDDO
-        ENDDO
-      ENDDO
-      IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
-        DO itrc=1,NAT
-          DO i=1,2
-            CALL exchange_r3d_tile (ng, tile,                           &
-     &                              LBi, UBi, LBj, UBj, 1, N(ng),       &
-     &                              OCEAN(ng)%t(:,:,:,i,itrc))
-          END DO
-        END DO
-      END IF
-#   ifdef DISTRIBUTE
-      DO itrc=1,NAT
-        DO i=1,2
-          CALL mp_exchange3d (ng, tile, iNLM, 1,                        &
-     &                        LBi, UBi, LBj, UBj, 1, N(ng),             &
-     &                        NghostPoints,                             &
-     &                        EWperiodic(ng), NSperiodic(ng),           &
-     &                        OCEAN(ng)%t(:,:,:,i,itrc))
-        END DO
-      END DO
-#   endif
-#  endif
 #  ifdef AICLIMATOLOGY
 #   ifdef ANA_AICLIMA
         CALL ana_aiclima (ng, tile, iNLM)

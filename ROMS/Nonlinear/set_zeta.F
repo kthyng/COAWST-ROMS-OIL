@@ -213,14 +213,12 @@
 # ifdef PROFILE
       CALL wclock_on (ng, iNLM, 12, __LINE__, __FILE__)
 # endif
-print *, 'zeta u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ', OCEAN(ng)%u(10,15,1,2)
       CALL set_avg_zeta_tile (ng, tile,                                     &
      &                    LBi, UBi, LBj, UBj,                           &
      &                    IminS, ImaxS, JminS, JmaxS,                   &
      &                    FIRSTCALL,                                    &
      &                    COUPLING(ng) % Zt_avg1,                       &
      &                    OCEAN(ng) % zeta)
-print *, 'zeta u(1): ', OCEAN(ng)%u(10,15,1,1), ' u(2): ', OCEAN(ng)%u(10,15,1,2)
 # ifdef PROFILE
       CALL wclock_off (ng, iNLM, 12, __LINE__, __FILE__)
 # endif

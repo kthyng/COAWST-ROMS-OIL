@@ -632,7 +632,6 @@
 !  Compute total depth (m) and vertically integrated mass fluxes.
 !-----------------------------------------------------------------------
 !
-!print *, 'zeta (start): ', zeta(10,15,:)
 # if defined DISTRIBUTE && !defined NESTING
 
 !  In distributed-memory, the I- and J-ranges are different and a
@@ -3063,10 +3062,6 @@
      &                    ubar(:,:,knew),                               &
      &                    vbar(:,:,knew))
 # endif
-!print *, 'Drhs: ', Drhs(10,15)
-!print *, 'DUon: ', DUon(10,15)
-!print *, 'ubar: ', ubar(10,15,:)
-!print *, 'zeta: ', zeta(10,15,:)
       RETURN
       END SUBROUTINE step2d_tile
 #else

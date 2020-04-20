@@ -138,14 +138,15 @@
       Lregrid=.FALSE.
       Tmono=Finfo(7,ifield,ng)
 !
-!      IF (ANINT(Tmono.lt.time(ng)).or.(iic(ng).eq.0).or.                     &
+!  KMT Changed so that edge case of run time `time(ng)` and clm times
+!  are more carefully checked in case they are equal. That is the change
+!  in logic here.
       IF ((ABS(Tmono-time(ng)).le.(0.5*dt(ng))).or.                    &
      &      (Tmono.lt.time(ng)).or.(iic(ng).eq.0)                &
      &     .or.(iic(ng).eq.0).or.                     &
      &    (iic(ng).eq.ntstart(ng))) THEN
 !      IF ((Tmono.lt.time(ng)).or.(iic(ng).eq.0).or.                     &
 !     &    (iic(ng).eq.ntstart(ng))) THEN
-!print *, ANINT((Tmono.le.time(ng))), (iic(ng).eq.0), (iic(ng).eq.ntstart(ng))
 !
 !  Load properties for requested field from information arrays.
 !

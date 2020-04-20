@@ -325,7 +325,9 @@
 !#endif
 !------------------
 #ifndef ANA_AKTCLIMA
+# if defined AKTCLIMATOLOGY || defined AKXCLIMATOLOGY
       allocate ( CLIMA(ng) % AKtclmG(LBi:UBi,LBj:UBj,0:N(ng),2) )
+# endif
 # if defined AKVCLIMATOLOGY || defined AKXCLIMATOLOGY
       allocate ( CLIMA(ng) % AKvclmG(LBi:UBi,LBj:UBj,0:N(ng),2) )
 # endif

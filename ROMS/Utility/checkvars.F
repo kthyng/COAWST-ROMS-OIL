@@ -123,9 +123,12 @@
 # ifdef SOLVE3D
           get_var(idUvel)=.TRUE.
           get_var(idVvel)=.TRUE.
+#  if !defined OFFLINE
+! KMT don't look for salt/temp if running offline
           DO itrc=1,NAT
             get_var(idTvar(itrc))=.TRUE.
           END DO
+#  endif
 # endif
 # if defined ICE_BIO && defined BERING_10K
           DO itrc=1,NBeT(ng)
@@ -140,9 +143,12 @@
 # ifdef SOLVE3D
         get_var(idUvel)=.TRUE.
         get_var(idVvel)=.TRUE.
+#  if !defined OFFLINE
+! KMT don't look for salt/temp if running offline
         DO itrc=1,NAT
           get_var(idTvar(itrc))=.TRUE.
         END DO
+#  endif
 # endif
 #endif
 #ifdef SOLVE3D

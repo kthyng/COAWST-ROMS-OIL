@@ -231,7 +231,7 @@
         ELSE
           nudg(l)=0.0_r8
         END IF
-# if defined FLOAT_OIL && defined OIL_DEBUG
+!# if defined FLOAT_OIL && defined OIL_DEBUG
 ! DDMITRY
 !        IF (l.eq.ifltX) THEN
 !          print*,'>> vwalk_floats: l=',l,'MyRank=',MyRank, &
@@ -239,7 +239,7 @@
 !     &           'rwalk=',rwalk(l),'Diffus=',track(ifakt,nfindx,l)
 !        ENDIF
 ! END DD
-# endif
+!# endif
       END DO
 
 # ifdef DIAPAUSE

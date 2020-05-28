@@ -123,8 +123,7 @@
 # ifdef SOLVE3D
           get_var(idUvel)=.TRUE.
           get_var(idVvel)=.TRUE.
-!#  if !defined OFFLINE
-#  if !defined OFFLINE || (defined OFFLINE and defined ATCLIMATOLOGY)
+#  if !defined OFFLINE
 ! KMT don't look for salt/temp if running offline
           DO itrc=1,NAT
             get_var(idTvar(itrc))=.TRUE.
@@ -144,8 +143,7 @@
 # ifdef SOLVE3D
         get_var(idUvel)=.TRUE.
         get_var(idVvel)=.TRUE.
-!#  if !defined OFFLINE
-#  if !defined OFFLINE || (defined OFFLINE and defined ATCLIMATOLOGY) 
+#  if !defined OFFLINE
 ! KMT don't look for salt/temp if running offline
         DO itrc=1,NAT
           get_var(idTvar(itrc))=.TRUE.

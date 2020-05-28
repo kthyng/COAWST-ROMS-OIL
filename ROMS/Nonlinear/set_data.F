@@ -2215,7 +2215,7 @@
       END DO
 #  endif
 
-#  if defined OFFLINE   
+#  if defined OFFLINE && defined ATCLIMATOLOGY  
       DO itrc=1,NAT     
         DO k=1,N(ng)    
           DO j=Jstr-1,Jend+1    

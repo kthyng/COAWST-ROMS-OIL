@@ -1228,6 +1228,7 @@
       Coptions(is:is+20)=' FLOAT_OIL & FLUXES,'
 #endif
 ! DD END
+
 #if defined FLOAT_STICKY && defined FLOATS && defined SOLVE3D
 !
       IF (Master) WRITE (stdout,20) 'FLOAT_STICKY',                     &
@@ -2070,24 +2071,92 @@
       is=LEN_TRIM(Coptions)+1
       Coptions(is:is+14)=' OCLIMATOLOGY,'
 #endif
-#if defined OFFLINE_FLOATS && defined CLIMATOLOGY
+
+! KMT
+#if defined OFFLINE
+      IF (Master) WRITE (stdout,20) 'OFFLINE',                   &
+     &   'Offline run (use model fields from history files).'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+9)=' OFFLINE,'
+#endif
+
+
+! KMT: CLIMATOLOGY appears to be unused outside of this file
+!#if defined OFFLINE_FLOATS && defined CLIMATOLOGY
+#if defined OFFLINE_FLOATS && defined OFFLINE
       IF (Master) WRITE (stdout,20) 'OFFLINE_FLOATS',                   &
      &   'Offline run (use model fields from history files).'
       is=LEN_TRIM(Coptions)+1
       Coptions(is:is+16)=' OFFLINE_FLOATS,'
 #endif
-#if defined OFFLINE_BIOLOGY && defined CLIMATOLOGY
+!#if defined OFFLINE_BIOLOGY && defined CLIMATOLOGY
+#if defined OFFLINE_BIOLOGY && defined OFFLINE
       IF (Master) WRITE (stdout,20) 'OFFLINE_BIOLOGY',                  &
      &   'Offline run (use model fields from history files).'
       is=LEN_TRIM(Coptions)+1
       Coptions(is:is+17)=' OFFLINE_BIOLOGY,'
 #endif
-#if defined OFFLINE_TPASSIVE && defined CLIMATOLOGY
+!#if defined OFFLINE_TPASSIVE && defined CLIMATOLOGY
+#if defined OFFLINE_TPASSIVE && defined OFFLINE
       IF (Master) WRITE (stdout,20) 'OFFLINE_TPASSIVE',                  &
      &   'Offline run (use model fields from history files).'
       is=LEN_TRIM(Coptions)+1
       Coptions(is:is+18)=' OFFLINE_TPASSIVE,'
 #endif
+
+
+
+! OFFLINE CLIMATOLOGY (Added by DJ)
+# if defined AKTCLIMATOLOGY  && defined OFFLINE
+      IF (Master) WRITE (stdout,20) 'AKTCLIMATOLOGY',                        &
+     &   'AKt climatology for OFFLINE model'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+16)=' AKTCLIMATOLOGY,'
+#endif
+# if defined AKSCLIMATOLOGY  && defined OFFLINE
+      IF (Master) WRITE (stdout,20) 'AKSCLIMATOLOGY',    &
+     &   'AKs climatology for OFFLINE model'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+16)=' AKSCLIMATOLOGY,'
+#endif
+# if defined AKVCLIMATOLOGY  && defined OFFLINE
+      IF (Master) WRITE (stdout,20) 'AKVCLIMATOLOGY',    &
+     &   'AKv climatology for OFFLINE model'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+16)=' AKVCLIMATOLOGY,'
+#endif
+# if defined AKXCLIMATOLOGY  && defined OFFLINE
+      IF (Master) WRITE (stdout,20) 'AKXCLIMATOLOGY',    &
+     &   'AK* climatology for OFFLINE model (Aks, Akt, Akv)'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+16)=' AKXCLIMATOLOGY,'
+#endif
+# if defined TKECLIMATOLOGY  && defined OFFLINE
+      IF (Master) WRITE (stdout,20) 'TKECLIMATOLOGY',               &
+     &   'TKE climatology for OFFLINE model'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+16)=' TKECLIMATOLOGY,'
+#endif
+# if defined GLSCLIMATOLOGY  && defined OFFLINE
+      IF (Master) WRITE (stdout,20) 'GLSCLIMATOLOGY',                 &
+     &   'GLS climatology for OFFLINE model'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+16)=' GLSCLIMATOLOGY,'
+#endif
+# if defined MIXCLIMATOLOGY  && defined OFFLINE
+      IF (Master) WRITE (stdout,20) 'MIXCLIMATOLOGY',    &
+     &   'TKE and GLS climatology for OFFLINE model'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+16)=' MIXCLIMATOLOGY,'
+#endif
+# if defined ATCLIMATOLOGY  && defined OFFLINE
+      IF (Master) WRITE (stdout,20) 'ATCLIMATOLOGY',                        &
+     &   'Temperature and salinity climatology for OFFLINE model'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+15)=' ATCLIMATOLOGY,'
+#endif
+! DJ END
+
 #if defined ONE_TRACER_SOURCE
       IF (Master) WRITE (stdout,20) 'ONE_TRACER_SOURCE',                &
      &   'One value per tracer for all sources.'

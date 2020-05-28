@@ -2215,7 +2215,8 @@
       END DO
 #  endif
 
-#  ifdef AICLIMATOLOGY
+!#  ifdef AICLIMATOLOGY  !modified by DJ
+#  if defined OFFLINE and defined ATCLIMATOLOGY
 #   ifdef ANA_AICLIMA
         CALL ana_aiclima (ng, tile, iNLM)
 #   else

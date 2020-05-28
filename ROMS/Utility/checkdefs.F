@@ -1228,6 +1228,41 @@
       Coptions(is:is+20)=' FLOAT_OIL & FLUXES,'
 #endif
 ! DD END
+
+
+! OFFLINE CLIMATOLOGY (Added by DJ)
+# if defined AKTCLIMATOLOGY 
+      IF (Master) WRITE (stdout,20) 'AKTCLIMATOLOGY',                        &
+     &   'AKt climatology for OFFLINE model'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+16)=' AKTCLIMATOLOGY,'
+#endif
+# if defined AKSCLIMATOLOGY 
+      IF (Master) WRITE (stdout,20) 'AKSCLIMATOLOGY',    &
+     &   'AKs climatology for OFFLINE model'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+16)=' AKSCLIMATOLOGY,'
+#endif
+# if defined TKECLIMATOLOGY 
+      IF (Master) WRITE (stdout,20) 'TKECLIMATOLOGY',               &
+     &   'TKE climatology for OFFLINE model'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+16)=' TKECLIMATOLOGY,'
+#endif
+# if defined GLSCLIMATOLOGY 
+      IF (Master) WRITE (stdout,20) 'GLSCLIMATOLOGY',                 &
+     &   'GLS climatology for OFFLINE model'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+16)=' GLSCLIMATOLOGY,'
+#endif
+# if defined ATCLIMATOLOGY 
+      IF (Master) WRITE (stdout,20) 'ATCLIMATOLOGY',                        &
+     &   'Temperature and salinity climatology for OFFLINE model'
+      is=LEN_TRIM(Coptions)+1
+      Coptions(is:is+15)=' ATCLIMATOLOGY,'
+#endif
+! DJ END
+
 #if defined FLOAT_STICKY && defined FLOATS && defined SOLVE3D
 !
       IF (Master) WRITE (stdout,20) 'FLOAT_STICKY',                     &

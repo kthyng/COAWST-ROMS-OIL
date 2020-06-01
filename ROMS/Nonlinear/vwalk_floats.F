@@ -121,7 +121,18 @@
       logical, intent(in) :: Predictor
 !
 # ifdef ASSUMED_SHAPE
+!MMMM added by Xu Chen
+
+!      logical, intent(in) :: bounded(:)
+
+#if defined OFFLINE_FLOATS && defined FLOAT_VWALK
+      logical, intent(inout) :: bounded(:)
+# else
       logical, intent(in) :: bounded(:)
+# endif
+
+!WWWW added by Xu Chen
+
       logical, intent(in) :: my_thread(Lstr:)
 
       real(r8), intent(in) :: Tinfo(0:,:)
@@ -130,7 +141,17 @@
       real(r8), intent(inout) :: nudg(Lstr:)
       real(r8), intent(inout) :: track(:,0:,:)
 # else
+
+!MMMM added by Xu Chen
+!      logical, intent(in) :: bounded(Nfloats(ng))
+
+#if defined OFFLINE_FLOATS && defined FLOAT_VWALK
+      logical, intent(inout) :: bounded(Nfloats(ng))
+# else
       logical, intent(in) :: bounded(Nfloats(ng))
+# endif
+!WWWW added by Xu Chen
+
       logical, intent(in) :: my_thread(Lstr:Lend)
 
       real(r8), intent(in) :: Tinfo(0:izrhs,Nfloats(ng))

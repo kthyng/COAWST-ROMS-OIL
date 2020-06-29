@@ -145,7 +145,7 @@
 !          real(r8), pointer :: AclmG(:,:,:,:)
 !#endif
 
-#if defined OFFLINE && defined OFFLINE_FLOATS
+#if defined OFFLINE && defined FLOAT_OIL
           real(r8), pointer :: Uwind(:,:)
           real(r8), pointer :: Vwind(:,:)
 # ifdef ANA_WINDS

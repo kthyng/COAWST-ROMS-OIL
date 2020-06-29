@@ -629,7 +629,7 @@
 !      END DO
 !#endif
 
-#if defined OFFLINE && defined_FLOAT_OIL
+#if defined OFFLINE && defined FLOAT_OIL
       DO j=Jmin,Jmax
           DO i=Imin,Imax
             CLIMA(ng) % Uwind(i,j) = IniVal

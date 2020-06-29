@@ -314,7 +314,7 @@
 #endif
 
 !Added by DJ ------------------------
-#if defined OFFLINE && FLOAT_OIL
+#if defined OFFLINE && defined FLOAT_OIL
       allocate ( CLIMA(ng) % Uwind(LBi:UBi,LBj:UBj) )
       allocate ( CLIMA(ng) % Vwind(LBi:UBi,LBj:UBj) )
 # ifdef ANA_WINDS

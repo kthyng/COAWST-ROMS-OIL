@@ -1852,6 +1852,33 @@
 
 ! Added by DJ ------------------------------------
 
+#if defined OFFLINE && defined FLOAT_OIL
+!-----------------------------------------------------------------------
+!  Surface wind components (necessary to include weathering effects on
+!  oil transport)
+!-----------------------------------------------------------------------
+!
+      CALL get_2dfld (ng, iNLM, idUair, ncFRCid(idUair,ng),             &
+     &                nFfiles(ng), FRC(1,ng), update(1),                &
+     &                LBi, UBi, LBj, UBj, 2, 1,                         &
+# ifdef MASKING
+     &                GRID(ng) % rmask,                                 &
+# endif
+     &                FORCES(ng) % UwindG)
+      IF (FoundError(exit_flag, NoError, __LINE__,                      &
+     &               __FILE__)) RETURN
+
+      CALL get_2dfld (ng , iNLM, idVair, ncFRCid(idVair,ng),            &
+     &                nFfiles(ng), FRC(1,ng), update(1),                &
+     &                LBi, UBi, LBj, UBj, 2, 1,                         &
+# ifdef MASKING
+     &                GRID(ng) % rmask,                                 &
+# endif
+     &                FORCES(ng) % VwindG)
+      IF (FoundError(exit_flag, NoError, __LINE__,                      &
+     &               __FILE__)) RETURN
+#endif
+
 !# if !defined ANA_AKTCLIMA && defined AKTCLIMATOLOGY
 !      write(*,*) 'reading AKt in climatology file'
 !      CALL get_3dfld (ng, iNLM, idAclm, ncCLMid(idAclm,ng),             &

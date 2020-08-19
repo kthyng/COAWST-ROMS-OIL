@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/250098905.svg)](https://zenodo.org/badge/latestdoi/250098905)
+
 # ROMS-OIL
 Oil plume model coupled with ROMS
 

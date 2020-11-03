@@ -17,7 +17,11 @@
       implicit none
 !
       PRIVATE
+#if defined SOLVE3D && defined OFFLINE
       PUBLIC  :: set_zeta, set_avg_zeta
+#else
+      PUBLIC  :: set_zeta
+#endif
 !
       CONTAINS
 !
@@ -191,7 +195,7 @@
       END SUBROUTINE set_zeta_tile
 #endif  /* SOLVE3D */
 
-#ifdef SOLVE3D && OFFLINE
+#if defined SOLVE3D && defined OFFLINE
 !
 !***********************************************************************
       SUBROUTINE set_avg_zeta (ng, tile, FIRSTCALL)

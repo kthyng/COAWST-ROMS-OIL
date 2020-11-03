@@ -144,6 +144,16 @@
 !          real(r8), pointer :: Aclm(:,:,:)
 !          real(r8), pointer :: AclmG(:,:,:,:)
 !#endif
+
+#if defined OFFLINE && defined FLOAT_OIL
+          real(r8), pointer :: Uwind(:,:)
+          real(r8), pointer :: Vwind(:,:)
+# ifdef ANA_WINDS
+          real(r8), pointer :: UwindG(:,:,:)
+          real(r8), pointer :: VwindG(:,:,:)
+# endif
+#endif 
+
 #if defined AKTCLIMATOLOGY || defined AKXCLIMATOLOGY
           real(r8), pointer :: AKtclm(:,:,:)
           real(r8), pointer :: AKtclmG(:,:,:,:)
@@ -304,6 +314,15 @@
 #endif
 
 !Added by DJ ------------------------
+#if defined OFFLINE && defined FLOAT_OIL
+      allocate ( CLIMA(ng) % Uwind(LBi:UBi,LBj:UBj) )
+      allocate ( CLIMA(ng) % Vwind(LBi:UBi,LBj:UBj) )
+# ifdef ANA_WINDS
+      allocate ( CLIMA(ng) % UwindG(LBi:UBi,LBj:UBj,2) )
+      allocate ( CLIMA(ng) % VwindG(LBi:UBi,LBj:UBj,2) )
+# endif
+#endif
+
 #if defined AKTCLIMATOLOGY || defined AKXCLIMATOLOGY 
       allocate ( CLIMA(ng) % AKtclm(LBi:UBi,LBj:UBj,0:N(ng)) )
 #endif
@@ -609,6 +628,21 @@
 !        END DO
 !      END DO
 !#endif
+
+#if defined OFFLINE && defined FLOAT_OIL
+      DO j=Jmin,Jmax
+          DO i=Imin,Imax
+            CLIMA(ng) % Uwind(i,j) = IniVal
+            CLIMA(ng) % Vwind(i,j) = IniVal
+#ifdef ANA_WINDS
+            CLIMA(ng) % UwindG(i,j,1) = IniVal
+            CLIMA(ng) % UwindG(i,j,2) = IniVal
+            CLIMA(ng) % VwindG(i,j,1) = IniVal
+            CLIMA(ng) % VwindG(i,j,2) = IniVal
+#endif
+          END DO
+      END DO
+#endif
 
 #ifdef AKTCLIMATOLOGY
       DO j=Jmin,Jmax

@@ -2337,6 +2337,73 @@
 #  endif
 # endif
 
+
+# if defined OFFLINE && defined FLOAT_OIL
+
+!-----------------------------------------------------------------------
+!  Set surface winds (m/s).
+!-----------------------------------------------------------------------
+!
+#   ifdef ANA_WINDS
+      CALL ana_winds (ng, tile, iNLM)
+#   else
+      CALL set_2dfld_tile (ng, tile, iNLM, idUair,                      &
+     &                     LBi, UBi, LBj, UBj,                          &
+     &                     FORCES(ng)%UwindG,                           &
+     &                     FORCES(ng)%Uwind,                            &
+     &                     update)
+      IF (FoundError(exit_flag, NoError, __LINE__,                      &
+     &               __FILE__)) RETURN
+
+      CALL set_2dfld_tile (ng, tile, iNLM, idVair,                      &
+     &                     LBi, UBi, LBj, UBj,                          &
+     &                     FORCES(ng)%VwindG,                           &
+     &                     FORCES(ng)%Vwind,                            &
+     &                     update)
+      IF (FoundError(exit_flag, NoError, __LINE__,                      &
+     &               __FILE__)) RETURN
+
+#    ifdef CURVGRID
+!
+!  If input point surface winds or interpolated from coarse data, rotate
+!  to curvilinear grid.
+!
+      IF (.not.Linfo(1,idUair,ng).or.                                   &
+     &    (Iinfo(5,idUair,ng).ne.Lm(ng)+2).or.                          &
+     &    (Iinfo(6,idUair,ng).ne.Mm(ng)+2)) THEN
+        DO j=JstrR,JendR
+          DO i=IstrR,IendR
+            cff1=FORCES(ng)%Uwind(i,j)*GRID(ng)%CosAngler(i,j)+         &
+     &           FORCES(ng)%Vwind(i,j)*GRID(ng)%SinAngler(i,j)
+            cff2=FORCES(ng)%Vwind(i,j)*GRID(ng)%CosAngler(i,j)-         &
+     &           FORCES(ng)%Uwind(i,j)*GRID(ng)%SinAngler(i,j)
+            FORCES(ng)%Uwind(i,j)=cff1
+            FORCES(ng)%Vwind(i,j)=cff2
+          END DO
+        END DO
+
+        IF (EWperiodic(ng).or.NSperiodic(ng)) THEN
+          CALL exchange_r2d_tile (ng, tile,                             &
+     &                            LBi, UBi, LBj, UBj,                   &
+     &                            FORCES(ng)%UWind)
+          CALL exchange_r2d_tile (ng, tile,                             &
+     &                            LBi, UBi, LBj, UBj,                   &
+     &                            FORCES(ng)%VWind)
+        END IF
+
+#     ifdef DISTRIBUTE
+        CALL mp_exchange2d (ng, tile, iNLM, 2,                          &
+     &                      LBi, UBi, LBj, UBj,                         &
+     &                      NghostPoints,                               &
+     &                      EWperiodic(ng), NSperiodic(ng),             &
+     &                      FORCES(ng)%UWind,                           &
+     &                      FORCES(ng)%VWind)
+#     endif
+      END IF
+#    endif
+#   endif
+#  endif
+
 # if defined SOLVE3D && defined OFFLINE
 !
 !-----------------------------------------------------------------------
